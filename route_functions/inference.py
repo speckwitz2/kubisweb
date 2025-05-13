@@ -1,0 +1,42 @@
+from flask import request, jsonify
+from PIL import Image
+import numpy as np
+import io
+import base64
+from model import doDetection
+import sqlite3
+import os
+
+def inference():
+    try:        
+        im = request.files.get("picture")
+        im_arr = np.array(Image.open(im))
+
+        # an example
+        # labeled_im = Image.fromarray(im_arr)
+        labeled_im_array, count, average_confidence = doDetection(im_arr)
+        labeled_im = Image.fromarray(labeled_im_array)
+        
+        img_io = io.BytesIO()
+        labeled_im.save(img_io, 'JPEG')
+        img_io.seek(0)
+
+        # insert into db
+        conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../database', 'logs.db'))
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO history (date, conf_average, count)
+            VALUES (datetime("now"), ?, ?)
+        ''', (str('%.2f' % average_confidence), count))
+        conn.commit()
+        conn.close()
+
+        return jsonify({
+            'count' : count,
+            'average_confidence' : f"{average_confidence:.2f}", 
+            'image' : base64.b64encode(img_io.getvalue()).decode('utf-8')
+        })
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500

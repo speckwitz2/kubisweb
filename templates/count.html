@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.min.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <title>Dashboard</title>
+</head>
+<body class="h-screen">    
+    <header class="fixed top-0 right-0 left-0 z-10 container mx-auto">
+        <nav class="bg-white border shadow-lg mx-6 my-4 rounded-lg">
+            <div class="flex justify-between h-16 px-5">
+                <div class="flex">
+                    <a href="#" class="flex items-center text-xl font-bold text-green-600">TSTH2</a>
+                </div>
+
+                <div class="hidden md:flex space-x-8 items-center">
+                    <!-- <a href="#" id="profile_menu" class="text-gray-700 hover:text-green-700 hover:font-bold text-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                          </svg>    
+                    </a>
+                    <div id="profile_dropdown" class="absolute hidden bg-white shadow-lg border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Settings</a>
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
+                    </div> -->
+                </div> 
+
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="/" class="text-gray-700 hover:text-green-700 hover:font-bold">
+                        Beranda
+                    </a>
+                    <a href="/history" class="text-gray-700 hover:text-green-700 hover:font-bold">
+                        Sejarah perhitungan
+                    </a>
+                </div> 
+
+
+            <div class="md:hidden flex items-center">
+                <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+            </div>
+
+            <div id="kentang_submenu" class="absolute hidden bg-white shadow-lg border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Settings</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
+            </div>
+
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-4 p-4 mx-6 border border-gray-300 space-y-6 bg-white rounded-lg shadow-lg">
+            <a href="#" class="block text-gray-700 hover:text-green-700">Home</a>
+
+            <details class="group">
+                <summary class="text-gray-700 hover:text-green-700 hover:font-bold flex items-center justify-between cursor-pointer list-none">
+                  Perhitungan Kubis
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline-block ml-1 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </summary>
+                <div class="pl-5 mt-2 space-y-2">
+                  <a href="#" class="block text-gray-600 hover:text-green-700">Grafik Kubis</a>
+                  <a href="#" class="block text-gray-600 hover:text-green-700">Laporan Harian</a>
+                </div>
+              </details>
+
+              <details class="group">
+                <summary class="text-gray-700 hover hover:text-green-700 flex items-center justify-between cursor-pointer list-none">
+                    Deteksi penyakit kentang
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline-block ml-1 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </summary>
+                <div class="pl-5 mt-2 space-y-2">
+                    <a href="#" class="block text-gray-700 hover hover:text-green-700">Grafik Kentang</a>
+                    <a href="#" class="block text-gray-700 hover hover:text-green-700">Laporan Harian</a>
+                </div>
+            </details>
+
+
+            <details class="group">
+                <summary class="text-gray-700 hover hover:text-green-700 flex items-center justify-between cursor-pointer list-none">
+                    Profile
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                      </svg>    
+                </summary>
+                <div class="pl-5 mt-2 space-y-3">
+                    <a href="#" class="block text-gray-700 hover hover:text-green-700">Settings</a>
+                    <a href="#" class="block text-gray-700 hover:font-bold hover:text-red-600">Logout</a>
+                </div>
+            </details>
+        </div>
+
+    </header>  
+
+    <div class="mt-[110px] pb-[50px]">
+        <div class="container mx-auto">
+            <h1 class="font-bold text-4xl m-6">Perhitungan Kubis</h1>
+            <div class="flex flex-col m-6 h-2vh">
+                <div class="flex lg:flex-row flex-col gap-5">
+                    <div class="card shadow-lg border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                        <h2 class="text-2xl font-bold relative pb-5 flex flex-col">
+                            Tambah perhitungan kubis
+                        </h2>
+                        <div id="drop-zone" class="w-full aspect-square lg:h-[60vh] md:h-[50vh] flex-1 bg-lime-200 rounded-lg border-lime-500 flex justify-center items-center relative transition duration-150">
+                            <input type="file" id="file-input" name="file" class="hidden" />
+                            <span class="font-bold" id="drop-zone-msg">Drop gambar disini atau klik untuk upload</span>
+                        </div>
+                    </div> 
+                </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto bottom-0 right-0 left-0 z-10 fixed w-full mt-3 mb-2">
+        <div class="flex flex-row items-center justify-center rounded-lg border border-gray-300 rounded-lg shadow-lg py-3 mx-6 bg-white">
+            <p><b>Developed by D3TI TA 2025 Group 06</b></p>
+        </div>
+    </div>
+
+    <script>
+        
+        const drop_zone = document.getElementById("drop-zone")
+        const file_input = document.getElementById("file-input")
+        const drop_zone_msg = document.getElementById("drop-zone-msg")
+
+        let up_state = "no_up"
+        function handleFileUpload(file) {
+            const formData = new FormData();
+            formData.append("picture", file);
+
+            setState("uploading");
+
+            fetch("/model/inference", {
+                method: "POST",
+                body: formData,
+            }).then(async res => {
+                if (res.ok) {
+                    setState("uploaded");
+
+                    const data = await res.json();
+                    const count = data.count;
+                    const av_confidence = data.average_confidence;
+                    const image = data.image;
+
+                    // Clean up styling
+                    drop_zone.classList.remove("bg-red-300", "border-red-500", "bg-yellow-200", "border-yellow-500");
+                    drop_zone_msg.innerHTML = "";
+
+                    const image_el = document.createElement("img");
+                    image_el.src = 'data:image/png;base64,' + image;
+                    image_el.className = "w-full h-auto rounded w-full h-full object-fit rounded-b-lg";
+
+                    const info = document.createElement("div");
+                    info.className = "absolute bottom-0 left-0 right-0 bg-white p-4 bg-lime-900 shadow-lg text-center";
+                    
+                    drop_zone.classList.add("border-4")
+                    drop_zone.classList.add("border-lime-900");
+
+                    info.innerHTML = `
+                        <p class="text-lg text-lime-200 font-semibold">Label: ${count}</p>
+                        <p class="text-sm text-lime-200 text-gray-700">Confidence: ${av_confidence}% <br> <a href="/count" class="font-bold underline">lakukan perhitungan lagi</a></p>
+                    `; 
+
+                    drop_zone.innerHTML = "";
+                    drop_zone.appendChild(image_el);
+                    drop_zone.appendChild(info);
+
+                    drop_zone.replaceWith(drop_zone.cloneNode(true));
+                   } else {
+                    setState("error");
+                    drop_zone.classList.add("bg-red-300");
+                    drop_zone.classList.add("border-2");
+                    drop_zone.classList.add("border-red-500");
+                    drop_zone_msg.innerHTML = "Gagal mengupload file, tekan untuk mencoba lagi";
+                }
+                })
+                .catch(() => setState("error"));
+        }
+
+        function summonFilePickerUpload() {
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*";
+
+            input.addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    handleFileUpload(file);
+                }
+            });
+
+            input.click();
+        }
+
+        function setState(state){
+            drop_zone.classList.remove("no_up", "uploading", "uploaded", "error")
+            drop_zone.classList.add(state);
+            up_state = state;
+
+            if (state === "uploading") {
+                drop_zone.classList.add("bg-yellow-200");
+                drop_zone.classList.add("border-2");
+                drop_zone.classList.add("border-yellow-500");
+                drop_zone_msg.innerHTML = "Mengupload file...";
+            }
+        }
+
+        drop_zone.addEventListener("click", summonFilePickerUpload)
+        drop_zone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            drop_zone.classList.add("bg-lime-300");
+            drop_zone.classList.add("border-2")
+        })
+
+        drop_zone.addEventListener("dragleave", (e) => {
+            drop_zone.classList.remove("bg-lime-300");
+            drop_zone.classList.remove("border-2");
+        })
+
+        drop_zone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            drop_zone.classList.remove("bg-lime-300");
+            drop_zone.classList.remove("border-2");
+            handleFileUpload(e.dataTransfer.files[0])
+        })
+
+        file_input.addEventListener("change", () => {
+            if(file_input.files.length > 0){
+                handleFileUpload(file_input.files[0])
+            }
+        })
+    </script>
+    </body>
+</html>

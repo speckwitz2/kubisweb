@@ -1,0 +1,3 @@
+__pycache__/
+model/current_model.pth
+node_modules/

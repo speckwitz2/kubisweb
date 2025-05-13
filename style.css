@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* In your Tailwind config or custom CSS if needed */
+.no-upload { @apply bg-lime-200 border-lime-500; }
+.uploading  { @apply bg-yellow-200 border-yellow-500; }
+.uploaded   { @apply bg-green-200 border-green-500; }
+.error      { @apply bg-red-200 border-red-500; }
