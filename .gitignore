@@ -1,3 +1,4 @@
 __pycache__/
-model/current_model.pth
+model/default.pth
 node_modules/
+experiment/

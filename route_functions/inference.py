@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from PIL import Image
+from PIL.ExifTags import TAGS
 import numpy as np
 import io
 import base64
@@ -7,10 +8,30 @@ from model import doDetection
 import sqlite3
 import os
 
+DESIRED_TAGS = {
+    'GPSLatitude',
+    'GPSLongitude',
+    'GPSAltitude',
+    'DateTimeOriginal',  # Pillow uses 'DateTimeOriginal' for the original creation timestamp
+}
+
 def inference():
     try:        
         im = request.files.get("picture")
         im_arr = np.array(Image.open(im))
+
+        raw_exif = Image.open(im).getexif()
+
+
+        tag_name_to_id = {name: id for id, name in TAGS.items()}  # ExifTags.TAGS maps IDs → names :contentReference[oaicite:2]{index=2}:contentReference[oaicite:3]{index=3}
+        metadata = {}
+        for tag_name in DESIRED_TAGS:
+            tag_id = tag_name_to_id.get(tag_name)
+            if tag_id is not None:
+                value = raw_exif.get(tag_id)
+                if value is not None:
+                    metadata[tag_name] = value  # only include if present :contentReference[oaicite:4]{index=4}
+
 
         # an example
         # labeled_im = Image.fromarray(im_arr)
@@ -34,8 +55,9 @@ def inference():
         return jsonify({
             'count' : count,
             'average_confidence' : f"{average_confidence:.2f}", 
-            'image' : base64.b64encode(img_io.getvalue()).decode('utf-8')
-        })
+            'image' : base64.b64encode(img_io.getvalue()).decode('utf-8'),
+            'metadata' : metadata
+        }), 200
     except Exception as e:
         return jsonify({
             "error": str(e)

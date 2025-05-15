@@ -133,8 +133,54 @@
         </div>
     </div>
 
+    <template id="im_info">
+        <div class="container mx-auto">
+            <div class="flex flex-col m-6">
+                <div class="flex lg:flex-row flex-col gap-5">
+                    <div class="card shadow-lg border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                        <div class="flex flex-col">
+                            <h2 class="text-2xl font-bold relative pb-5 flex flex-col w-full">
+                                Metadata gambar
+                            </h2>
+                            <div class="flex flex-row justify-center gap-3">
+                            <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
+                                    <p>
+                                        <b>Tinggi drone : </b>
+                                    </p>
+                                    <p id="metadata_height">256 meter</p>
+                                </div>
+                            <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
+                                    <p>
+                                        <b>Tanggal pengambilan : </b> 
+                                    </p>
+                                    <p id="metadata_date">29/03/2004</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-row justify-center gap-3 mt-3">
+                            <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
+                                    <p>
+                                        <b>latitude : </b> 
+                                    </p>
+                                    <p id="metadata_lat">
+                                        37.7749
+                                    </p>
+                                </div>
+                            <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
+                                    <p>
+                                        <b>longtitude : </b> 
+                                    </p>
+                                    <p id="metadata_long">
+                                        -122.4194
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+            </div>
+        </div>
+    </template>
+
     <script>
-        
         const drop_zone = document.getElementById("drop-zone")
         const file_input = document.getElementById("file-input")
         const drop_zone_msg = document.getElementById("drop-zone-msg")
