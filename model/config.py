@@ -73,12 +73,11 @@ def buildCustomFPNBackbone(cfg, input_shape):
     )
 
 ### BACKONE
-
 cfg = get_cfg()
 
 cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
-cfg.MODEL.DEVICE = "cpu"
+cfg.MODEL.DEVICE = "cuda"
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = 2
-cfg.MODEL.WEIGHTS = "model/default.pth"
-cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.85
+cfg.MODEL.WEIGHTS = "model/weight.pth"
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.9
 cfg.MODEL.BACKBONE.NAME = "buildCustomFPNBackbone"

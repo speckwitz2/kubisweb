@@ -12,6 +12,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .container {
+            max-width: 800px!important;
+        }
+    </style>
 
     <title>Dashboard</title>
 </head>
@@ -108,7 +113,7 @@
 
     </header>  
 
-    <div class="mt-[110px] pb-[50px]">
+    <div class="mt-[110px]">
         <div class="container mx-auto">
             <h1 class="font-bold text-4xl m-6">Perhitungan Kubis</h1>
             <div class="flex flex-col m-6 h-2vh">
@@ -127,36 +132,29 @@
         </div>
     </div>
 
-    <div class="container mx-auto bottom-0 right-0 left-0 z-10 fixed w-full mt-3 mb-2">
-        <div class="flex flex-row items-center justify-center rounded-lg border border-gray-300 rounded-lg shadow-lg py-3 mx-6 bg-white">
-            <p><b>Developed by D3TI TA 2025 Group 06</b></p>
-        </div>
-    </div>
-
-    <template id="im_info">
-        <div class="container mx-auto">
-            <div class="flex flex-col m-6">
-                <div class="flex lg:flex-row flex-col gap-5">
-                    <div class="card shadow-lg border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
-                        <div class="flex flex-col">
-                            <h2 class="text-2xl font-bold relative pb-5 flex flex-col w-full">
-                                Metadata gambar
-                            </h2>
-                            <div class="flex flex-row justify-center gap-3">
-                            <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
-                                    <p>
-                                        <b>Tinggi drone : </b>
-                                    </p>
-                                    <p id="metadata_height">256 meter</p>
-                                </div>
-                            <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
-                                    <p>
-                                        <b>Tanggal pengambilan : </b> 
-                                    </p>
-                                    <p id="metadata_date">29/03/2004</p>
-                                </div>
+    <div class="container mx-auto hidden pb-[60px]" id="metadata_card">
+        <div class="flex flex-col m-6">
+            <div class="flex lg:flex-row flex-col gap-5">
+                <div class="card shadow-lg border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                    <div class="flex flex-col">
+                        <h2 class="text-2xl font-bold relative pb-5 flex flex-col w-full">
+                            Metadata gambar
+                        </h2>
+                        <div class="flex flex-row justify-center gap-3">
+                        <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
+                                <p>
+                                    <b>Tinggi drone : </b>
+                                </p>
+                                <p id="metadata_height">n meter</p>
                             </div>
-                            <div class="flex flex-row justify-center gap-3 mt-3">
+                            <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
+                                <p>
+                                    <b>Tanggal pengambilan : </b> 
+                                </p>
+                                <p id="metadata_date">29/03/2004</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-row justify-center gap-3 mt-3">
                             <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
                                     <p>
                                         <b>latitude : </b> 
@@ -177,9 +175,14 @@
                         </div>
                     </div>    
             </div>
-        </div>
-    </template>
+    </div>
 
+    <div class="container mx-auto bottom-0 right-0 left-0 z-10 fixed w-full mt-3 mb-2">
+        <div class="flex flex-row items-center justify-center rounded-lg border border-gray-300 rounded-lg shadow-lg py-3 mx-6 bg-white">
+            <p><b>Developed by D3TI TA 2025 Group 06</b></p>
+        </div>
+    </div>
+    
     <script>
         const drop_zone = document.getElementById("drop-zone")
         const file_input = document.getElementById("file-input")
@@ -203,6 +206,24 @@
                     const count = data.count;
                     const av_confidence = data.average_confidence;
                     const image = data.image;
+                    
+                    // metadata 
+                    const metadata = data.metadata;
+                    let lat_deg = metadata.gps.lat[0][0] / metadata.gps.lat[0][1]
+                    let lat_min = metadata.gps.lat[1][0] / metadata.gps.lat[1][1]
+                    let lat_sec = metadata.gps.lat[2][0] / metadata.gps.lat[2][1]
+                    let latitude = `${lat_deg + (lat_min / 60) + (lat_sec / 3600)} ${metadata.gps.lat_ref}`
+
+                    let long_deg = metadata.gps.long[0][0] / metadata.gps.long[0][1]
+                    let long_min = metadata.gps.long[1][0] / metadata.gps.long[1][1]
+                    let long_sec = metadata.gps.long[2][0] / metadata.gps.long[2][1]
+                    let longtitude = `${long_deg + (lat_min / 60) + (long_sec / 3600)} ${metadata.gps.long_ref}`
+                    
+                    document.getElementById("metadata_lat").innerHTML = latitude
+                    document.getElementById("metadata_long").innerHTML = longtitude
+                    document.getElementById("metadata_card").classList.remove("hidden")
+                    document.getElementById("metadata_height").innerHTML = `${metadata.gps.alt[0] / metadata.gps.alt[1]} M`
+                    document.getElementById("metadata_date").innerHTML = `${metadata.datetime}`
 
                     // Clean up styling
                     drop_zone.classList.remove("bg-red-300", "border-red-500", "bg-yellow-200", "border-yellow-500");

@@ -27,7 +27,7 @@ def partDetectionCallback(image_slice: np.ndarray) -> sv.Detections:
     return sv.Detections.empty()
 
 
-def doDetection(image: np.ndarray, slice_wh=(800, 800)):
+def doDetection(image: np.ndarray, slice_wh=(512, 512)):
   try:
     # time when the function start
     tstart = time.time()
@@ -37,7 +37,7 @@ def doDetection(image: np.ndarray, slice_wh=(800, 800)):
         overlap_wh=(100, 100),
         overlap_ratio_wh=None,
         iou_threshold=0.5,
-        thread_workers=2
+        thread_workers=16
     )
 
     detection = slicer(image)
@@ -48,7 +48,7 @@ def doDetection(image: np.ndarray, slice_wh=(800, 800)):
     label_annotator = sv.LabelAnnotator()
 
     annotated_image = box_annotator.annotate(scene=image, detections=detection)
-    labels = [f"{metadata.thing_classes[cid]} {conf*100:.2f}%" for cid, conf in zip(detection.class_id, detection.confidence)]
+    labels = [f"{conf*100:.2f}%" for cid, conf in zip(detection.class_id, detection.confidence)]
     annotated_image = label_annotator.annotate(
         scene=annotated_image,
         detections=detection,
