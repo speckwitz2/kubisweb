@@ -1,4 +1,4 @@
 __pycache__/
-model/default.pth
+model/weight.pth
 node_modules/
 experiment/
