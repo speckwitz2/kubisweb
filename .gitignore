@@ -1,4 +1,6 @@
 __pycache__/
-model/weight.pth
+model/*.pth
+static/result/*
 node_modules/
 experiment/
+database/logs.db
