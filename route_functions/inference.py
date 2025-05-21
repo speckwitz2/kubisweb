@@ -8,6 +8,7 @@ from model import doDetection
 import sqlite3
 import os
 from datetime import datetime as dttm
+from datetime import datetime as dttm
 
 def inference():
     try:        
@@ -36,7 +37,7 @@ def inference():
         img_io.seek(0)
 
         # adding file
-        img_filename = f"detection_{dttm.now()}.jpeg"
+        img_filename = f"count_{dttm.now()}.jpeg"
         with open(os.path.join(os.path.dirname(__file__), "../static/result", img_filename), "wb") as file:
             file.write(img_io.getvalue())
 
@@ -53,6 +54,7 @@ def inference():
         return jsonify({
             'count' : count,
             'average_confidence' : f"{average_confidence:.2f}", 
+            'image' : f"/static/result/{img_filename}",
             'image' : f"/static/result/{img_filename}",
             'metadata' : {
                 'gps' : {
