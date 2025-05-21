@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <title>Dashboard</title>
+</head>
+<body class="h-screen ">    
+    <header class="fixed top-0 right-0 left-0 z-10 container mx-auto">
+        <nav class="bg-white border shadow-xl mx-6 my-4 rounded-lg">
+            <div class="flex justify-between h-16 px-5">
+                <div class="flex">
+                    <a href="#" class="flex items-center text-xl font-bold text-green-600">TSTH2</a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#" class="text-gray-700 hover:text-green-700 hover:font-bold">Home</a>
+
+                    <div class="relative inline-block text-left">
+                        <!-- Summoner -->
+                        <a href="#" id="kubis_menu" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                          Perhitungan Kubis
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </a>
+                      
+                        <!-- Dropdown -->
+                        <div id="kubis_dropdown" class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl hidden z-20">
+                          <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Grafik Kubis</a>
+                          <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Laporan Harian</a>
+                          <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Pengaturan</a>
+                        </div>
+                    </div>
+        
+                    <div class="relative inline-block text-left">
+                        <a href="#" id="kentang_menu" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                            Deteksi penyakit kentang
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                  </svg>
+                            </span>
+                        </a>
+                        <div id="kentang_dropdown" class="absolute left-0 mt-2 w-50 bg-white border border-gray-300 rounded-lg shadow-xl hidden z-20">
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Grafik Kentang</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Laporan Harian</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Pengaturan</a>
+                        </div>    
+                    </div>
+                </div>
+
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#" id="profile_menu" class="text-gray-700 hover:text-green-700 hover:font-bold text-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                          </svg>    
+                    </a>
+                    <div id="profile_dropdown" class="absolute hidden bg-white shadow-2xl border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Settings</a>
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
+                    </div>
+                </div> 
+
+            <div class="md:hidden flex items-center">
+                <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+            </div>
+
+            <div id="kentang_submenu" class="absolute hidden bg-white shadow-2xl border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Settings</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
+            </div>
+
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-4 p-4 mx-6 border border-gray-300 space-y-6 bg-white rounded-lg shadow-2xl">
+            <a href="#" class="block text-gray-700 hover:text-green-700">Home</a>
+
+            <details class="group">
+                <summary class="text-gray-700 hover:text-green-700 hover:font-bold flex items-center justify-between cursor-pointer list-none">
+                  Perhitungan Kubis
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline-block ml-1 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </summary>
+                <div class="pl-5 mt-2 space-y-2">
+                  <a href="#" class="block text-gray-600 hover:text-green-700">Grafik Kubis</a>
+                  <a href="#" class="block text-gray-600 hover:text-green-700">Laporan Harian</a>
+                </div>
+              </details>
+
+              <details class="group">
+                <summary class="text-gray-700 hover hover:text-green-700 flex items-center justify-between cursor-pointer list-none">
+                    Deteksi penyakit kentang
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline-block ml-1 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </summary>
+                <div class="pl-5 mt-2 space-y-2">
+                    <a href="#" class="block text-gray-700 hover hover:text-green-700">Grafik Kentang</a>
+                    <a href="#" class="block text-gray-700 hover hover:text-green-700">Laporan Harian</a>
+                </div>
+            </details>
+
+
+            <details class="group">
+                <summary class="text-gray-700 hover hover:text-green-700 flex items-center justify-between cursor-pointer list-none">
+                    Profile
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                      </svg>    
+                </summary>
+                <div class="pl-5 mt-2 space-y-3">
+                    <a href="#" class="block text-gray-700 hover hover:text-green-700">Settings</a>
+                    <a href="#" class="block text-gray-700 hover:font-bold hover:text-red-600">Logout</a>
+                </div>
+            </details>
+        </div>
+
+    </header>  
+
+    <div class="container mx-auto pt-20">
+        <h1 class="font-bold text-4xl m-6">Dashboard</h1>
+        <div class="flex flex-col m-6">
+            <div class="flex lg:flex-row flex-col gap-5">
+                <div class="card shadow-2xl border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                    <h2 class="text-2xl font-bold relative pb-5 flex flex-col">
+                        Grafik hasil perhitungan kubis
+                        <span class="text-sm text-gray-500">Last updated: 2 days ago</span>
+                    </h2>
+                    <canvas id="chart" class="w-full h-2vh flex-1"></canvas>
+                </div>    
+                <div class="card shadow-2xl border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                    <h2 class="text-2xl font-bold relative pb-3 flex flex-col">
+                        Grafik hasil deteksi penyakit kentang
+                        <span class="text-sm text-gray-500">Last updated: 2 days ago</span>
+                     </h2>
+                    <canvas id="chart2" class="w-full max-h-[50vh] flex-1"></canvas>
+                </div>    
+            </div>
+        </div>
+    
+    <div class="container mx-auto">
+        <div class="flex flex-col m-6">
+            <div class="flex lg:flex-row flex-col gap-5">
+                <div class="card shadow-2xl border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                    <div class="flex flex-col">
+                        <h2 class="text-2xl font-bold relative pb-5 flex flex-col w-full">
+                            Data hasil perhitungan kubis
+                        </h2>
+                        <table class="table-auto w-full border-separate border-spacing-0">
+                            <thead>
+                                <tr class="border-b">
+                                    <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-gray-100">Tanggal</th>
+                                    <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-green-100">Jumlah</th>
+                                    <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-blue-100">Rata-rata <i>confidence</i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="text-center px-4 py-2 bg-gray-50">2025-04-01</td>
+                                    <td class="text-center px-4 py-2 bg-green-50">25</td>
+                                    <td class="text-center px-4 py-2 bg-blue-50">91%</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="text-center px-4 py-2 bg-gray-50">2025-04-02</td>
+                                    <td class="text-center px-4 py-2 bg-green-50">30</td>
+                                    <td class="text-center px-4 py-2 bg-blue-50">88%</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="text-center px-4 py-2 bg-gray-50">2025-04-03</td>
+                                    <td class="text-center px-4 py-2 bg-green-50">28</td>
+                                    <td class="text-center px-4 py-2 bg-blue-50">92%</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="text-center px-4 py-2 bg-gray-50">2025-04-04</td>
+                                    <td class="text-center px-4 py-2 bg-green-50">22</td>
+                                    <td class="text-center px-4 py-2 bg-blue-50">85%</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="text-center px-4 py-2 bg-gray-50">2025-04-05</td>
+                                    <td class="text-center px-4 py-2 bg-green-50">35</td>
+                                    <td class="text-center px-4 py-2 bg-blue-50">94%</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="text-center px-4 py-2 bg-gray-50">2025-04-06</td>
+                                    <td class="text-center px-4 py-2 bg-green-50">27</td>
+                                    <td class="text-center px-4 py-2 bg-blue-50">89%</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="text-center px-4 py-2 bg-gray-50">2025-04-07</td>
+                                    <td class="text-center px-4 py-2 bg-green-50">29</td>
+                                    <td class="text-center px-4 py-2 bg-blue-50">87%</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="text-center px-4 py-2 bg-gray-50">2025-04-08</td>
+                                    <td class="text-center px-4 py-2 bg-green-50">32</td>
+                                    <td class="text-center px-4 py-2 bg-blue-50">90%</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="text-center px-4 py-2 bg-gray-50">2025-04-09</td>
+                                    <td class="text-center px-4 py-2 bg-green-50">26</td>
+                                    <td class="text-center px-4 py-2 bg-blue-50">86%</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center px-4 py-2 bg-gray-50">2025-04-10</td>
+                                    <td class="text-center px-4 py-2 bg-green-50">31</td>
+                                    <td class="text-center px-4 py-2 bg-blue-50">93%</td>
+                                </tr>
+                            </tbody>
+                        </table>                        
+                    </div>
+                </div>    
+                <div class="card shadow-2xl border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1 border-1 border-gray-300">
+                    <h2 class="text-2xl font-bold relative pb-3 flex flex-col">
+                        Data hasil deteksi penyakit kentang
+                     </h2>
+                     <table class="table-auto w-full border-separate border-spacing-0">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-gray-100">Tanggal</th>
+                                <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-orange-100">Jumlah Sakit</th>
+                                <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-purple-100">Jumlah Sehat</th>
+                                <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-blue-100">Rata-rata confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-200">
+                                <td class="text-center px-4 py-2">04/01</td>
+                                <td class="text-center px-4 py-2">5</td>
+                                <td class="text-center px-4 py-2">25</td>
+                                <td class="text-center px-4 py-2">89%</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="text-center px-4 py-2">04/02</td>
+                                <td class="text-center px-4 py-2">3</td>
+                                <td class="text-center px-4 py-2">25</td>
+                                <td class="text-center px-4 py-2">91%</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="text-center px-4 py-2">04/03</td>
+                                <td class="text-center px-4 py-2">6</td>
+                                <td class="text-center px-4 py-2">29</td>
+                                <td class="text-center px-4 py-2">87%</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="text-center px-4 py-2">04/04</td>
+                                <td class="text-center px-4 py-2">4</td>
+                                <td class="text-center px-4 py-2">27</td>
+                                <td class="text-center px-4 py-2">90%</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="text-center px-4 py-2">04/05</td>
+                                <td class="text-center px-4 py-2">5</td>
+                                <td class="text-center px-4 py-2">24</td>
+                                <td class="text-center px-4 py-2">88%</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="text-center px-4 py-2">04/06</td>
+                                <td class="text-center px-4 py-2">2</td>
+                                <td class="text-center px-4 py-2">31</td>
+                                <td class="text-center px-4 py-2">93%</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="text-center px-4 py-2">04/07</td>
+                                <td class="text-center px-4 py-2">6</td>
+                                <td class="text-center px-4 py-2">20</td>
+                                <td class="text-center px-4 py-2">84%</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="text-center px-4 py-2">04/08</td>
+                                <td class="text-center px-4 py-2">4</td>
+                                <td class="text-center px-4 py-2">30</td>
+                                <td class="text-center px-4 py-2">90%</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="text-center px-4 py-2">04/09</td>
+                                <td class="text-center px-4 py-2">7</td>
+                                <td class="text-center px-4 py-2">23</td>
+                                <td class="text-center px-4 py-2">86%</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="text-center px-4 py-2">04/10</td>
+                                <td class="text-center px-4 py-2">3</td>
+                                <td class="text-center px-4 py-2">29</td>
+                                <td class="text-center px-4 py-2">92%</td>
+                            </tr>
+                        </tbody>
+                    </table>                    
+                </div>    
+            </div>
+        </div>
+
+    <div class="container mx-auto">
+        <div class="flex flex-row items-center justify-center p-3 mb-5 mx-6 pb-6 rounded-lg">
+            <p><b>Developed by D3TI TA 2025 Group 06</b></p>
+        </div>
+    </div>
+
+    <script>
+        const toggleButton = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+    
+        toggleButton.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+
+        const chartid = document.getElementById('chart').getContext('2d');
+        const chart = new Chart(chartid, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Jumlah Penyakit kentang',
+                    data: [65, 59, 80, 81, 56, 55, 40],
+                    fill: false,
+                    borderColor: 'rgb(50, 225, 192)',
+                    backgroundColor: 'rgb(50, 225, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                }
+            }
+        });
+
+        const chartid2 = document.getElementById('chart2').getContext('2d');
+        const chart2 = new Chart(chartid2, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Sehat',
+                    data: [65, 59, 80, 81, 56, 55, 40],
+                    fill: false,
+                    backgroundColor: 'rgb(50, 225, 192)',
+                    tension: 0.1
+                },
+                {
+                    label: 'Sakit',
+                    data: [10, 15, 10, 71, 10, 5, 35],
+                    fill: true,
+                    backgroundColor : 'rgb(225, 50, 100)',
+                    borderColor: 'rgb(225, 50, 100)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+
+                }
+            }
+        });
+
+        const profileMenu = document.getElementById('profile_menu');
+        const profileDropdown = document.getElementById('profile_dropdown');
+
+        profileMenu.addEventListener('click', () => {
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', (event) => {
+            if (!profileMenu.contains(event.target) && !profileDropdown.contains(event.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        /** Kubis **/
+        const kubisMenu = document.getElementById('kubis_menu');
+        const kubisDropdown = document.getElementById('kubis_dropdown');
+
+        kubisMenu.addEventListener('click', () => {
+            kubisDropdown.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', (event) => {
+            if (!kubisMenu.contains(event.target) && !kubisDropdown.contains(event.target)) {
+                kubisDropdown.classList.add('hidden');
+            }
+        });
+
+        /** kentang **/
+        const kentangMenu = document.getElementById('kentang_menu');
+        const kentang = document.getElementById('kentang_dropdown');
+
+        kentangMenu.addEventListener('click', () => {
+            kentang.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', (event) => {
+            if (!kentangMenu.contains(event.target) && !kentang.contains(event.target)) {
+                kentang.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
