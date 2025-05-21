@@ -7,8 +7,6 @@ import base64
 from model import doDetection
 import sqlite3
 import os
-from datetime import datetime as dttm
-from datetime import datetime as dttm
 
 def inference():
     try:        
@@ -36,11 +34,6 @@ def inference():
         labeled_im.save(img_io, 'JPEG')
         img_io.seek(0)
 
-        # adding file
-        img_filename = f"count_{dttm.now()}.jpeg"
-        with open(os.path.join(os.path.dirname(__file__), "../static/result", img_filename), "wb") as file:
-            file.write(img_io.getvalue())
-
         # insert into db
         conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../database', 'logs.db'))
         cursor = conn.cursor()
@@ -54,8 +47,7 @@ def inference():
         return jsonify({
             'count' : count,
             'average_confidence' : f"{average_confidence:.2f}", 
-            'image' : f"/static/result/{img_filename}",
-            'image' : f"/static/result/{img_filename}",
+            'image' : base64.b64encode(img_io.getvalue()).decode('utf-8'),
             'metadata' : {
                 'gps' : {
                     'lat' : lat_rational or None,

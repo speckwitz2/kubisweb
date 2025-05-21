@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hasil Klasifikasi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    #map {
+      height: 400px;
+      margin-top: 30px;
+      border-radius: 0.75rem;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-green-50 to-white min-h-screen p-6 flex flex-col justify-between">
+
+  <div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-7xl mx-auto">
+
+    <!-- Header + Tombol Download -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+      <h2 class="text-3xl font-extrabold text-green-800 tracking-tight text-center md:text-left mb-4 md:mb-0">
+        Hasil NDRE & Klasifikasi Kesehatan Tanaman
+      </h2>
+     <a href="{{ url_for('kentang_bp.pdfkentang') }}" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-5 rounded-xl shadow transition duration-300">
+    Unduh Data Lengkap
+</a>
+    </div>
+
+    <!-- Gambar Output -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      {% if original_preview %}
+      <div class="hover:scale-105 transition duration-300 ease-in-out overflow-hidden cursor-zoom-in">
+        <h4 class="text-lg font-semibold text-gray-800 mb-2 text-center">Citra Asli</h4>
+        <img src="{{ original_preview }}" alt="Citra Asli" class="zoomable-image w-full rounded-xl shadow-lg" />
+      </div>
+      {% endif %}
+
+      {% if overlay_result_url %}
+      <div class="hover:scale-105 transition duration-300 ease-in-out overflow-hidden cursor-zoom-in">
+        <h4 class="text-lg font-semibold text-gray-800 mb-2 text-center">Hasil Klasifikasi</h4>
+        <img src="{{ overlay_result_url }}" alt="Hasil Klasifikasi" class="zoomable-image w-full rounded-xl shadow-lg" />
+      </div>
+      {% endif %}
+
+      {% if overlay_before_labels_url and final_overlay_url %}
+      <div class="hover:scale-105 transition duration-300 ease-in-out overflow-hidden cursor-zoom-in">
+        <h4 class="text-lg font-semibold text-red-600 mb-2 text-center">Hasil Klasifikasi</h4>
+        <div class="relative">
+          <img id="overlayBefore" src="{{ overlay_before_labels_url }}" alt="Sebelum Hitung" class="zoomable-image w-full rounded-xl shadow-lg border-4 border-gray-400" />
+          <img id="overlayAfter" src="{{ final_overlay_url }}" alt="Setelah Hitung" class="zoomable-image w-full rounded-xl shadow-lg border-4 border-red-400 hidden" />
+        </div>
+
+        <div class="flex justify-center mt-4">
+          <button id="beforeBtn" class="bg-gray-600 text-white py-2 px-4 rounded-xl hover:bg-gray-700 transition duration-300 mx-2">
+            Sebelum Hitung
+          </button>
+          <button id="afterBtn" class="bg-green-600 text-white py-2 px-4 rounded-xl hover:bg-green-700 transition duration-300 mx-2">
+            Setelah Hitung
+          </button>
+        </div>
+      </div>
+
+      <script>
+        document.getElementById('beforeBtn').addEventListener('click', function () {
+          document.getElementById('overlayBefore').classList.remove('hidden');
+          document.getElementById('overlayAfter').classList.add('hidden');
+        });
+
+        document.getElementById('afterBtn').addEventListener('click', function () {
+          document.getElementById('overlayBefore').classList.add('hidden');
+          document.getElementById('overlayAfter').classList.remove('hidden');
+        });
+      </script>
+      {% endif %}
+    </div>
+
+    <!-- Metadata GPS -->
+    {% if coordinates %}
+    <div class="mb-10">
+      <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">Metadata GPS</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-gray-700">
+        <div class="bg-gray-50 p-5 rounded-xl shadow-sm">
+          <p class="font-medium">Tanggal Gambar Diambil</p>
+          <p class="text-green-700 text-lg">{{ coordinates.DateTime }}</p>
+        </div>
+        <div class="bg-gray-50 p-5 rounded-xl shadow-sm">
+          <p class="font-medium">Koordinat Lintang</p>
+          <p class="text-green-700 text-lg">{{ coordinates.Latitude }}</p>
+        </div>
+        <div class="bg-gray-50 p-5 rounded-xl shadow-sm">
+          <p class="font-medium">Koordinat Bujur</p>
+          <p class="text-green-700 text-lg">{{ coordinates.Longitude }}</p>
+        </div>
+        <div class="bg-gray-50 p-5 rounded-xl shadow-sm">
+          <p class="font-medium">Ketinggian</p>
+          <p class="text-green-700 text-lg">{{ coordinates.Altitude }}</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Tabel Ringkasan -->
+    {% if classification_summary %}
+    <div class="mt-10">
+      <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">Statistik Klasifikasi</h3>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-200 shadow rounded-xl text-sm">
+          <thead class="bg-green-100 text-gray-700">
+            <tr>
+              <th class="px-6 py-3 border text-center">Zona Sehat (%)</th>
+              <th class="px-6 py-3 border text-center">Zona Tidak Sehat (%)</th>
+              <th class="px-6 py-3 border text-center">Rata-rata Confidence</th>
+              <th class="px-6 py-3 border text-center">Jumlah Zona</th>
+              <th class="px-6 py-3 border text-center">Zona Sehat</th>
+              <th class="px-6 py-3 border text-center">Zona Sakit</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for row in classification_summary %}
+            <tr class="hover:bg-green-50 transition duration-200">
+              <td class="px-6 py-3 border text-center text-green-600 font-semibold">{{ row.zona_sehat }}%</td>
+              <td class="px-6 py-3 border text-center text-red-600 font-semibold">{{ row.zona_tidak_sehat }}%</td>
+              <td class="px-6 py-3 border text-center">{{ row.mean_confidence }}</td>
+              <td class="px-6 py-3 border text-center">{{ row.num_zones }}</td>
+              <td class="px-6 py-3 border text-center text-green-500">{{ row.sehat_zones }}</td>
+              <td class="px-6 py-3 border text-center text-red-500">{{ row.sakit_zones }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Klasifikasi Baru -->
+    <div class="mt-8 text-center">
+      <a href="" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-xl shadow transition duration-300">
+        Klasifikasi Baru
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Modal Preview Gambar -->
+  <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+    <img id="modalImage" src="" alt="Preview Gambar" class="max-h-[90vh] max-w-[90vw] rounded-xl shadow-2xl border-4 border-white" />
+  </div>
+
+  <!-- Script Modal -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const modal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('modalImage');
+
+      document.querySelectorAll('.zoomable-image').forEach(img => {
+        img.addEventListener('click', () => {
+          modalImage.src = img.src;
+          modal.classList.remove('hidden');
+        });
+      });
+
+      modal.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        modalImage.src = "";
+      });
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="mt-16 text-center text-sm text-gray-500">
+    <p>© {{ current_year }} Sistem Klasifikasi Kesehatan Tanaman • Dibuat oleh TSTH2</p>
+  </footer>
+
+</body>
+</html>
