@@ -4,3 +4,4 @@ static/result/*
 node_modules/
 experiment/
 database/logs.db
+.env

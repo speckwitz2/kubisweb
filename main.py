@@ -1,14 +1,15 @@
-from flask import Flask
-from route import gen_route_bp, model_bp
-import sqlite3, base64, os, json
-
 from flask import Flask, jsonify
-from PIL.TiffImagePlugin import IFDRational
 from flask.json.provider import DefaultJSONProvider as BaseProvider
 
+import sqlite3, base64, os, json
+import route_functions as rf
+from os import environ
+from PIL.TiffImagePlugin import IFDRational
+
 app = Flask(__name__)
-app.register_blueprint(gen_route_bp)
-app.register_blueprint(model_bp)
+
+app.secret_key = environ.get("APP_SECRET_KEY")
+
 
 conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'database', 'logs.db'))
 cursor = conn.cursor()
@@ -41,5 +42,14 @@ class CustomJSONProvider(BaseProvider):
 
 app.json = CustomJSONProvider(app)
 
+app.route('/')(rf.index)
+app.route('/count')(rf.count)
+app.route('/history')(rf.history)
+app.route('/model/inference', methods=['POST'])(rf.inference)
+
+@app.route('/login')
+def login():
+    return ""
+    
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
