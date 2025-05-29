@@ -209,15 +209,9 @@
                     
                     // metadata 
                     const metadata = data.metadata;
-                    let lat_deg = metadata.gps.lat[0][0] / metadata.gps.lat[0][1]
-                    let lat_min = metadata.gps.lat[1][0] / metadata.gps.lat[1][1]
-                    let lat_sec = metadata.gps.lat[2][0] / metadata.gps.lat[2][1]
-                    let latitude = `${lat_deg + (lat_min / 60) + (lat_sec / 3600)} ${metadata.gps.lat_ref}`
+                    let latitude = `${metadata.gps.lat} ${metadata.gps.lat_ref}`
 
-                    let long_deg = metadata.gps.long[0][0] / metadata.gps.long[0][1]
-                    let long_min = metadata.gps.long[1][0] / metadata.gps.long[1][1]
-                    let long_sec = metadata.gps.long[2][0] / metadata.gps.long[2][1]
-                    let longtitude = `${long_deg + (lat_min / 60) + (long_sec / 3600)} ${metadata.gps.long_ref}`
+                    let longtitude = `${metadata.gps.long} ${metadata.gps.long_ref}`
                     
                     document.getElementById("metadata_lat").innerHTML = latitude
                     document.getElementById("metadata_long").innerHTML = longtitude

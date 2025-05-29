@@ -23,9 +23,20 @@ def inference():
             gps = exif_dict["GPS"]
             lat_rational = gps.get(piexif.GPSIFD.GPSLatitude)
             lat_rational_ref = gps.get(piexif.GPSIFD.GPSLatitudeRef).decode('ascii')
+            lat_deg = lat_rational[0][0] / lat_rational[0][1]
+            lat_min = lat_rational[1][0] / lat_rational[1][1]
+            lat_sec = lat_rational[2][0] / lat_rational[2][1]
+            latitude = lat_deg + (lat_min/60) + (lat_sec/3600)
+
             long_rational = gps.get(piexif.GPSIFD.GPSLongitude)
             long_rational_ref = gps.get(piexif.GPSIFD.GPSLongitudeRef).decode('ascii')
+            long_deg = long_rational[0][0] / long_rational[0][1]
+            long_min = long_rational[1][0] / long_rational[1][1]
+            long_sec = long_rational[2][0] / long_rational[2][1]
+            longtitude = long_deg + (long_min/60) + (long_sec/3600)
+            
             alt_rational = gps.get(piexif.GPSIFD.GPSAltitude)
+
             datetime = exif_dict["Exif"].get(piexif.ExifIFD.DateTimeOriginal).decode('ascii')
 
 
@@ -45,9 +56,9 @@ def inference():
         conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../database', 'logs.db'))
         cursor = conn.cursor()
         cursor.execute('''
-            INSERT INTO history (date, conf_average, count)
-            VALUES (datetime("now"), ?, ?)
-        ''', (str('%.2f' % average_confidence), count))
+            INSERT INTO history (date, conf_average, count, lat, lat_ref, long, long_ref, alt, image_name)
+            VALUES (datetime("now"), ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (str('%.2f' % average_confidence), f"{count}", f"{latitude}", f"{lat_rational_ref}", f"{longtitude}", f"{long_rational_ref}", f"{alt_rational}", f"{img_filename}"))
         conn.commit()
         conn.close()
 
@@ -55,12 +66,11 @@ def inference():
             'count' : count,
             'average_confidence' : f"{average_confidence:.2f}", 
             'image' : f"/static/result/{img_filename}",
-            'image' : f"/static/result/{img_filename}",
             'metadata' : {
                 'gps' : {
-                    'lat' : lat_rational or None,
+                    'lat' : latitude or None,
                     'lat_ref' : lat_rational_ref or None,
-                    'long' : long_rational or None,
+                    'long' : longtitude or None,
                     'long_ref' : long_rational_ref or None,
                     'alt' : alt_rational or None
                 },
