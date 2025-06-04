@@ -3,48 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.min.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
 
-    <title>Detection history</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .container {
+            max-width: 800px!important;
+        }
+    </style>
+
+    <title>Riwayat</title>
 </head>
 <body class="h-screen ">    
     <header class="fixed top-0 right-0 left-0 z-10 container mx-auto">
-        <nav class="bg-white border shadow-lg mx-6 my-4 rounded-lg">
+        <nav class="bg-white border shadow-xl mx-6 my-4 rounded-lg">
             <div class="flex justify-between h-16 px-5">
                 <div class="flex">
                     <a href="#" class="flex items-center text-xl font-bold text-green-600">TSTH2</a>
                 </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="/" class="text-gray-700 hover:text-green-700 hover:font-bold">Home</a>
+
+                    <div class="relative inline-block text-left">
+                        <!-- Summoner -->
+                        <a href="/kubis/count" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                          Halaman Perhitungan
+                        </a>
+                                          </div>
+        
+                    <div class="relative inline-block text-left">
+                        <a href="/kubis/history" id="kentang_menu" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                            Sejarah
+                        </a>
+                    </div>
+                </div>
 
                 <div class="hidden md:flex space-x-8 items-center">
-                    <!-- <a href="#" id="profile_menu" class="text-gray-700 hover:text-green-700 hover:font-bold text-xl">
+                    <a href="#" id="profile_menu" class="text-gray-700 hover:text-green-700 hover:font-bold text-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                             <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
                           </svg>    
                     </a>
-                    <div id="profile_dropdown" class="absolute hidden bg-white shadow-lg border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
+                    <div id="profile_dropdown" class="absolute hidden bg-white shadow-2xl border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
                         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Settings</a>
-                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
-                    </div> -->
+                        <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
+                    </div>
                 </div> 
-
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="/" class="text-gray-700 hover:text-green-700 hover:font-bold">
-                        Beranda
-                    </a>
-                    <a href="/history" class="text-gray-700 hover:text-green-700 hover:font-bold">
-                        Sejarah perhitungan
-                    </a>
-                </div> 
-
 
             <div class="md:hidden flex items-center">
                 <button id="menu-toggle" class="text-gray-700 focus:outline-none">
@@ -55,41 +65,18 @@
                 </button>
             </div>
 
-            <div id="kentang_submenu" class="absolute hidden bg-white shadow-lg border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Settings</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
+            <div id="kentang_submenu" class="absolute hidden bg-white shadow-2xl border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
+                <a href="/settings" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Settings</a>
+                <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
             </div>
 
         </nav>
-        <div id="mobile-menu" class="hidden md:hidden px-4 p-4 mx-6 border border-gray-300 space-y-6 bg-white rounded-lg shadow-lg">
-            <a href="#" class="block text-gray-700 hover:text-green-700">Home</a>
+        <div id="mobile-menu" class="hidden md:hidden px-4 p-4 mx-6 border border-gray-300 space-y-6 bg-white rounded-lg shadow-2xl">
+            <a href="/" class="block text-gray-700 hover:text-green-700">Home</a>
 
-            <details class="group">
-                <summary class="text-gray-700 hover:text-green-700 hover:font-bold flex items-center justify-between cursor-pointer list-none">
-                  Perhitungan Kubis
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline-block ml-1 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                <div class="pl-5 mt-2 space-y-2">
-                  <a href="#" class="block text-gray-600 hover:text-green-700">Grafik Kubis</a>
-                  <a href="#" class="block text-gray-600 hover:text-green-700">Laporan Harian</a>
-                </div>
-              </details>
+            <a href="/kubis/count" class="block text-gray-700 hover hover:text-green-700">Halam Perhitungan</a>
 
-              <details class="group">
-                <summary class="text-gray-700 hover hover:text-green-700 flex items-center justify-between cursor-pointer list-none">
-                    Deteksi penyakit kentang
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline-block ml-1 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </summary>
-                <div class="pl-5 mt-2 space-y-2">
-                    <a href="#" class="block text-gray-700 hover hover:text-green-700">Grafik Kentang</a>
-                    <a href="#" class="block text-gray-700 hover hover:text-green-700">Laporan Harian</a>
-                </div>
-            </details>
-
+            <a href="/kubis/history" class="block text-gray-700 hover hover:text-green-700">Sejarah</a>
 
             <details class="group">
                 <summary class="text-gray-700 hover hover:text-green-700 flex items-center justify-between cursor-pointer list-none">
@@ -100,44 +87,224 @@
                       </svg>    
                 </summary>
                 <div class="pl-5 mt-2 space-y-3">
-                    <a href="#" class="block text-gray-700 hover hover:text-green-700">Settings</a>
-                    <a href="#" class="block text-gray-700 hover:font-bold hover:text-red-600">Logout</a>
+                    <a href="/settings" class="block text-gray-700 hover hover:text-green-700">Settings</a>
+                    <a href="/logout" class="block text-gray-700 hover:font-bold hover:text-red-600">Logout</a>
                 </div>
             </details>
         </div>
+
     </header>  
 
     <div class="container mx-auto pt-20">
-        <h1 class="font-bold text-4xl m-6">Histori Perhitungan</h1>
+        <h1 class="font-bold text-4xl m-6">Riwayat</h1>
+        <div class="flex flex-col m-6">
+            <div class="flex lg:flex-row flex-col gap-5">
+                <div class="card shadow-2xl border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                    <h2 class="text-2xl font-bold relative pb-3 flex flex-col">
+                        Grafik hasil deteksi penyakit kentang
+                     </h2>
+                    <canvas id="chart2" class="w-full h-64 flex-1"></canvas>
+                </div>    
+            </div>
+        </div>
+    
+
+    <div class="container mx-auto">
         <div class="flex flex-col m-6">
             <div class="flex lg:flex-row flex-col gap-5">
                 <div class="card shadow-2xl border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
                     <div class="flex flex-col">
+                        <h2 class="text-2xl font-bold relative pb-5 flex flex-col w-full">
+                            Tambah kelompok perhitungan
+                        </h2>
+                        <form class="flex w-full space-x-2" id="new_counting_group_form">
+                        <input
+                            type="text"
+                            name="counting-group-name"
+                            placeholder="Nama kelompok perhitungan baru"
+                            class="flex-grow border-2 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md"
+                        />
+
+                        <input
+                            type="date"
+                            name="date"
+                            class="border-2 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md"
+                        />
+
+                        <button
+                            type="submit"
+                            class="bg-green-500 text-white px-4 py-1 rounded-lg hover:bg-green-700 shadow-md"
+                        >
+                            Submit
+                        </button>
+                        </form>
+                    </div>
+                </div>    
+            </div>
+        </div>
+
+    <div class="container mx-auto">
+        <div class="flex flex-col m-6">
+            <div class="flex lg:flex-row flex-col gap-5">
+                <div class="card shadow-2xl border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                    <div class="flex flex-col">
+                        <h2 class="text-2xl font-bold relative pb-5 flex flex-col w-full">
+                            Data hasil perhitungan kubis
+                        </h2>
                         <table class="table-auto w-full border-separate border-spacing-0">
                             <thead>
                                 <tr class="border-b">
                                     <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-gray-100">Tanggal</th>
-                                    <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-green-100">Jumlah</th>
+                                    <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-green-100">Total Jumlah</th>
                                     <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-blue-100">Rata-rata <i>confidence</i></th>
+                                    <th class="text-gray-700 hover:text-orange-700 hover:font-bold text-center px-4 py-2 bg-orange-100">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in rows %}
+                                {% for x in his %}
                                 <tr class="border-b">
-                                    <td class="text-center px-4 py-2 bg-gray-50">{{ item[0] }}</td>
-                                    <td class="text-center px-4 py-2 bg-green-50">{{ item[1] }}</td>
-                                    <td class="text-center px-4 py-2 bg-blue-50">{{ item[2] }}%</td>
+                                    <td class="text-center px-4 py-2 bg-gray-50">{{x[1]}}</td>
+                                    <td class="text-center px-4 py-2 bg-gray-50">{{x[2]}}</td>
+                                    <td class="text-center px-4 py-2 bg-blue-50">{{x[3]}}</td>
+                                    <td class="text-center px-4 py-2 bg-orange-50 flex items-center justify-center py-4">
+                                            <a href="
+                                                {% if x[2] is none or x[3] is none %}
+                                                    #
+                                                {% else %}
+                                                    /kubis/history/detail/{{ x[0] }}
+                                                {% endif %}
+                                            " class="
+                                                px-2 py-1 text-sm rounded text-white 
+                                                {% if x[2] is none or x[3] is none %}
+                                                    pointer-events-none text-gray-400 cursor-not-allowed bg-gray-300 text-gray-700
+                                                {% else %}
+                                                    bg-yellow-500 hover:bg-yellow-600 
+                                                {% endif %}
+                                            ">Detail</a>
+                                            <button onclick="summonConfirmDialog({{x[0]}})" class="px-2 py-1 text-sm rounded bg-red-500 text-white hover:bg-red-600 mx-3">Hapus</button>
+                                    </td>                                    
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>                        
                     </div>
                 </div>    
+            </div>
+        </div>
 
-                <div class="container mx-auto bottom-0 right-0 left-0 z-10 fixed w-full mt-3 mb-2">
-                    <div class="flex flex-row items-center justify-center rounded-lg border border-gray-300 rounded-lg shadow-lg py-3 mx-6 bg-white">
-                        <p><b>Developed by D3TI TA 2025 Group 06</b></p>
-                    </div>
-                </div>            
-    </body>
+    <div class="container mx-auto">
+        <div class="flex flex-row items-center justify-center p-3 mb-5 mx-6 pb-6 rounded-lg">
+            <p><b>Developed by D3TI TA 2025 Group 06</b></p>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full text-center">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Apakah anda yakin?</h2>
+            <p class="text-gray-600 mb-6">Aksi ini akan menghapus kelompok perhitungan ini dan perhitungan yang didalamnya.</p>
+            <div class="flex justify-center gap-4">
+            <button onclick="closeConfirmDialog()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+            <a id="confirmDeleteLink" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700" href="#">Delete</a>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        function closeConfirmDialog(){
+            document.getElementById("confirmModal").classList.add("hidden")
+            document.getElementById("confirmDeleteLink").setAttribute("href", "#")
+        }
+
+        function summonConfirmDialog(id){
+            document.getElementById("confirmModal").classList.remove("hidden")
+            document.getElementById("confirmDeleteLink").setAttribute("href", `/kubis/history/delete/${id}`)
+        }
+
+        const toggleButton = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+    
+        toggleButton.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+
+        const chartid2 = document.getElementById('chart2').getContext('2d');
+        const chart2 = new Chart(chartid2, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for x in his %}
+                        "{{ 0 if x[1] is none else x[1]}}",
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Jumlah',
+                    data: [
+                        {% for x in his %}
+                            {{ 0 if x[2] is none else x[2]  }},
+                        {% endfor %}
+
+                    ],
+                    fill: false,
+                    backgroundColor: 'rgb(50, 225, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+
+                }
+            }
+        });
+
+        const profileMenu = document.getElementById('profile_menu');
+        const profileDropdown = document.getElementById('profile_dropdown');
+
+        profileMenu.addEventListener('click', () => {
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', (event) => {
+            if (!profileMenu.contains(event.target) && !profileDropdown.contains(event.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        document.getElementById("new_counting_group_form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = {
+                counting_group_name: form['counting-group-name'].value,
+                date: form['date'].value,
+            }
+
+            try {
+                const response = await fetch('/kubis/action/add_counting_group', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+
+                if(response.ok){
+                    alert("Berhasil menambahkan counting group");
+                    form.reset();
+                }else{
+                    const body = await response.json();
+                    const err = body.error;
+                    alert('Gagal menambahkan counting group, galat : ' + err)
+                }
+            }catch(err){
+                console.error('Request failed', err);
+                alert('An error occuring while submit')
+            }
+        })
+    </script>
+</body>
 </html>

@@ -14,6 +14,13 @@ def inference():
     try:        
         lat_rational, alt_rational = ("", "")
         im = request.files.get("picture")
+        cg_id = request.form.get("counting_group_id")
+
+        if not im or not cg_id :
+            return jsonify({
+                "error" : "bad request, no image or counting group id selected"
+            }), 400
+
         im_arr = np.array(Image.open(im))
 
         img_file = Image.open(im)
@@ -36,6 +43,7 @@ def inference():
             longtitude = long_deg + (long_min/60) + (long_sec/3600)
             
             alt_rational = gps.get(piexif.GPSIFD.GPSAltitude)
+            alt_rational = alt_rational
 
             datetime = exif_dict["Exif"].get(piexif.ExifIFD.DateTimeOriginal).decode('ascii')
 
@@ -56,9 +64,9 @@ def inference():
         conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../database', 'logs.db'))
         cursor = conn.cursor()
         cursor.execute('''
-            INSERT INTO history (date, conf_average, count, lat, lat_ref, long, long_ref, alt, image_name)
-            VALUES (datetime("now"), ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (str('%.2f' % average_confidence), f"{count}", f"{latitude}", f"{lat_rational_ref}", f"{longtitude}", f"{long_rational_ref}", f"{alt_rational}", f"{img_filename}"))
+                INSERT INTO counting (group_id, date, conf_average, count, lat, lat_ref, long, long_ref, alt, image_name) 
+                VALUES (?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (cg_id ,str('%.2f' % average_confidence), f"{count}", f"{latitude}", f"{lat_rational_ref}", f"{longtitude}", f"{long_rational_ref}", f"{alt_rational}", f"{img_filename}"))
         conn.commit()
         conn.close()
 

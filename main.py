@@ -17,26 +17,35 @@ if ENV_FILE:
 app.secret_key = env.get("APP_SECRET_KEY")
 
 path = os.path.join(os.path.dirname(__file__), 'database', 'logs.db')
-with open(path, 'a') as f:
-    f.write("a")
+# with open(path, 'w') as f:
+#     f.truncate(0)
 
 conn = sqlite3.connect(path)
 cursor = conn.cursor()
 
 # create table if doesnot exists (for first time)
 cursor.execute('''
-        CREATE TABLE IF NOT EXISTS history (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date TEXT NOT NULL,
-            conf_average REAL NOT NULL,
-            count INTEGER NOT NULL,
-            lat REAL NOT NULL,
-            lat_ref TEXT NOT NULL,
-            long REAL NOT NULL,
-            long_ref TEXT NOT NULL,
-            alt REAL NOT NULL,
-            image_name TEXT NOT NULL
-        )
+    CREATE TABLE IF NOT EXISTS counting_group (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        date DATETIME NOT NULL);
+''')
+
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS counting (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                group_id INTEGER NOT NULL,
+                date DATETIME NOT NULL,
+                conf_average REAL NOT NULL,
+                count INTEGER NOT NULL,
+                lat REAL NOT NULL,
+                lat_ref TEXT NOT NULL,
+                long REAL NOT NULL,
+                long_ref TEXT NOT NULL,
+                alt REAL NOT NULL,
+                image_name TEXT NOT NULL,
+                FOREIGN KEY (group_id) REFERENCES counting_group(id)
+    );
 ''')
 
 class CustomJSONEncoder(json.JSONEncoder):
@@ -124,9 +133,13 @@ def callback():
 
 app.route('/')(rf.index)
 
-app.route('/count')(rf.requires_auth(rf.count))
-app.route('/history')(rf.history)
-app.route('/model/inference', methods=['POST'])(rf.inference)
+app.route('/kubis/count')(rf.requires_auth(rf.count))
+app.route('/kubis/history')(rf.requires_auth(rf.history))
+app.route('/kubis/history/detail/<int:id>')(rf.requires_auth(rf.history_detail))
+app.route('/kubis/history/delete/<int:id>')(rf.requires_auth(rf.history_delete))
+
+app.route('/kubis/action/add_counting_group', methods=['POST'])(rf.add_counting_group)
+app.route('/kubis/action/inference', methods=['POST'])(rf.inference)
 
 
 if __name__ == "__main__":

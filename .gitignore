@@ -5,3 +5,4 @@ node_modules/
 experiment/
 database/logs.db
 .env
+database/dummy.py
