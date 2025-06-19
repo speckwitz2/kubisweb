@@ -9,6 +9,7 @@ from torchvision.models.feature_extraction import create_feature_extractor
 from detectron2.modeling.backbone.fpn import FPN
 import torch
 import torchvision
+from os import environ
 
 BACKBONE_REGISTRY._obj_map.clear()
 
@@ -76,8 +77,8 @@ def buildCustomFPNBackbone(cfg, input_shape):
 cfg = get_cfg()
 
 cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
-cfg.MODEL.DEVICE = "cuda"
+cfg.MODEL.DEVICE = "cuda" if environ.get("INFERENCE_DEVICE", "cpu") == "cuda" else "cpu"
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = 2
-cfg.MODEL.WEIGHTS = "model/weight.pth"
+cfg.MODEL.WEIGHTS = "model/weights/weight.pth"
 cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.9
 cfg.MODEL.BACKBONE.NAME = "buildCustomFPNBackbone"
