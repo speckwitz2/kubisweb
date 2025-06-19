@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.12
 
 # Declaring absolute directory path for the system and copy all
 WORKDIR /app
@@ -9,7 +9,6 @@ RUN mkdir -p /app/database && \
 
 # Install depedencies
 RUN apt-get update && apt-get install -y libgl1-mesa-glx
-RUN apt-get install -y git
 RUN apt-get update && \
     apt-get install -y build-essential && \
     rm -rf /var/lib/apt/lists/*
@@ -21,10 +20,6 @@ RUN pip install -r requirements.txt --no-build-isolation
 
 # Cleaning up
 RUN rm -rf ~/.cache/pip
-RUN apt-get purge -y libgl1-mesa-glx git
-RUN pip uninstall -y cython pyyaml
-RUN apt-get purge -y build-essential
-
 RUN apt-get autoremove -y 
 RUN rm -rf /var/lib/apt/lists/*
 
