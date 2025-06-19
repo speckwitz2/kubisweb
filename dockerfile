@@ -4,9 +4,10 @@ FROM python:3.12
 WORKDIR /app
 COPY . .
 
-RUN touch /app/database/logs.db
+RUN mkdir -p /app/database && \
+    touch /app/database/logs.db
 
-# Install depedencies
+    # Install depedencies
 RUN apt-get update && apt-get install -y libgl1-mesa-glx
 
 RUN pip install -U torch torchvision -f https://download.pytorch.org/wh1/cu101/torch_stable.html
