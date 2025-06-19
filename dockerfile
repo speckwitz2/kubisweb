@@ -4,6 +4,8 @@ FROM python:3.12
 WORKDIR /app
 COPY . .
 
+RUN touch /app/database/logs.db
+
 # Install depedencies
 RUN apt-get update && apt-get install -y libgl1-mesa-glx
 

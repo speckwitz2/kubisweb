@@ -2,6 +2,8 @@ services:
   kubisweb:
     build: .
     ports: 
-      - "80:5000"
+      - "5000:5000"
     volumes:
       - "./model/weights:/app/model/weights"
+    env_file:
+      - .env
