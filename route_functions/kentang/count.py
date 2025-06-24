@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect
 import sqlite3, os
 
 def index():
-    return render_template("kubis/index.html")
+    return render_template("index.html")
 
 def count():
     conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../database', 'logs.db'))
@@ -15,5 +15,5 @@ def count():
     print(rows)
     cursor.close()
 
-    return render_template("kubis/count.html", count_group=rows)
+    return render_template("count.html", count_group=rows)
 

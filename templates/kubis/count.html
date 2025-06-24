@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.min.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .container {
+            max-width: 800px!important;
+        }
+    </style>
+
+    <title>Dashboard</title>
+</head>
+<body class="h-screen">    
+    <header class="fixed top-0 right-0 left-0 z-10 container mx-auto">
+        <nav class="bg-white border shadow-xl mx-6 my-4 rounded-lg">
+            <div class="flex justify-between h-16 px-5">
+                <div class="flex">
+                    <a href="#" class="flex items-center text-xl font-bold text-green-600">TSTH2</a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="/" class="text-gray-700 hover:text-green-700 hover:font-bold">Home</a>
+
+                    <div class="relative inline-block text-left">
+                        <!-- Summoner -->
+                        <a href="/kubis/count" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                          Halaman Perhitungan
+                        </a>
+                                          </div>
+        
+                    <div class="relative inline-block text-left">
+                        <a href="/kubis/history" id="kentang_menu" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                            Sejarah
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#" id="profile_menu" class="text-gray-700 hover:text-green-700 hover:font-bold text-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                          </svg>    
+                    </a>
+                    <div id="profile_dropdown" class="absolute hidden bg-white shadow-2xl border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Settings</a>
+                        <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
+                    </div>
+                </div> 
+
+            <div class="md:hidden flex items-center">
+                <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+            </div>
+
+            <div id="kentang_submenu" class="absolute hidden bg-white shadow-2xl border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
+                <a href="/settings" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Settings</a>
+                <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
+            </div>
+
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-4 p-4 mx-6 border border-gray-300 space-y-6 bg-white rounded-lg shadow-2xl">
+            <a href="/" class="block text-gray-700 hover:text-green-700">Home</a>
+
+            <a href="/kubis/count" class="block text-gray-700 hover hover:text-green-700">Halam Perhitungan</a>
+
+            <a href="/kubis/history" class="block text-gray-700 hover hover:text-green-700">Sejarah</a>
+
+            <details class="group">
+                <summary class="text-gray-700 hover hover:text-green-700 flex items-center justify-between cursor-pointer list-none">
+                    Profile
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                      </svg>    
+                </summary>
+                <div class="pl-5 mt-2 space-y-3">
+                    <a href="/settings" class="block text-gray-700 hover hover:text-green-700">Settings</a>
+                    <a href="/logout" class="block text-gray-700 hover:font-bold hover:text-red-600">Logout</a>
+                </div>
+            </details>
+        </div>
+
+    </header>    
+
+    <div class="mt-[110px]">
+        <div class="container mx-auto">
+            <h1 class="font-bold text-4xl m-6">Perhitungan Kubis</h1>
+            <div class="flex flex-col m-6 h-2vh">
+                <div class="flex lg:flex-row flex-col gap-5">
+                    <div class="card shadow-lg border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                        <h2 class="text-2xl font-bold relative pb-5 flex flex-col">
+                            Tambah perhitungan kubis
+                        </h2>
+                        <select name="count-group-select" id="count-group-select" class="px-3 py-2 mb-5 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-600 focus:border-green-500 w-full">
+                            <option value="none">Select counting group</option>
+                            {% for i in count_group %}
+                                <option value="{{ i[0] }}"> {{ i[1] }} 📅 {{ i[2][:10] }} </option>
+                            {% endfor %}
+                        </select>
+                        <div id="drop-zone" class="w-full aspect-square lg:h-[60vh] md:h-[50vh] flex-1 bg-lime-200 rounded-lg border-lime-500 flex justify-center items-center relative transition duration-150">
+                            <input type="file" id="file-input" name="file" class="hidden" />
+                            <span class="font-bold" id="drop-zone-msg">Drop gambar disini atau klik untuk upload</span>
+                        </div>
+                    </div> 
+                </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto" id="if-you-forget">
+            <div class="flex flex-col m-6 h-2vh">
+                <div class="flex lg:flex-row flex-col gap-5">
+                    <div class="card shadow-lg border border-gray-300 duration-150 p-3 rounded-lg flex-grow flex-1 duration-150">
+                        <button class="text-sm text-gray-400" onclick="toggle_new_cg_fm()">
+                            Lupa menambahkan kelompok perhitungan? <b>klik kartu ini</b>
+                        </button>
+                        <form class="flex w-full space-x-2 mt-3 hidden" id="new_counting_group_form">
+                            <input
+                                type="text"
+                                name="counting-group-name"
+                                placeholder="Nama kelompok perhitungan baru"
+                                class="flex-grow border-2 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md"
+                            />
+
+                            <input
+                                type="date"
+                                name="date"
+                                class="border-2 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md"
+                            />
+
+                            <button
+                                type="submit"
+                                class="bg-green-500 text-white px-4 py-1 rounded-lg hover:bg-green-700 shadow-md"
+                            >
+                                Submit
+                            </button>
+                        </form>
+                    </div> 
+                </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto hidden pb-[60px]" id="metadata_card">
+        <div class="flex flex-col m-6">
+            <div class="flex lg:flex-row flex-col gap-5">
+                <div class="card shadow-lg border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                    <div class="flex flex-col">
+                        <h2 class="text-2xl font-bold relative pb-5 flex flex-col w-full">
+                            Metadata gambar
+                        </h2>
+                        <div class="flex flex-row justify-center gap-3">
+                        <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
+                                <p>
+                                    <b>Tinggi drone : </b>
+                                </p>
+                                <p id="metadata_height">n meter</p>
+                            </div>
+                            <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
+                                <p>
+                                    <b>Tanggal pengambilan : </b> 
+                                </p>
+                                <p id="metadata_date">29/03/2004</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-row justify-center gap-3 mt-3">
+                            <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
+                                    <p>
+                                        <b>latitude : </b> 
+                                    </p>
+                                    <p id="metadata_lat">
+                                        37.7749
+                                    </p>
+                                </div>
+                            <div class="class shadow-sm py-2 px-10 border text-center border-gray-200 rounded-lg">
+                                    <p>
+                                        <b>longtitude : </b> 
+                                    </p>
+                                    <p id="metadata_long">
+                                        -122.4194
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+            </div>
+    </div>
+
+    <div class="container mx-auto bottom-0 right-0 left-0 z-10 fixed w-full mt-3 mb-2">
+        <div class="flex flex-row items-center justify-center rounded-lg border border-gray-300 rounded-lg shadow-lg py-3 mx-6 bg-white">
+            <p><b>Developed by D3TI TA 2025 Group 06</b></p>
+        </div>
+    </div>
+    
+    <script>
+
+        function toggle_new_cg_fm(){
+            const form = document.getElementById("new_counting_group_form")
+            form.classList.toggle("hidden");
+        }
+
+        const drop_zone = document.getElementById("drop-zone")
+        const file_input = document.getElementById("file-input")
+        const drop_zone_msg = document.getElementById("drop-zone-msg")
+
+        let up_state = "no_up"
+        function handleFileUpload(file) {
+            const formData = new FormData();
+
+            document.getElementById("if-you-forget").classList.add("hidden")
+
+
+            let cig = document.getElementById("count-group-select").value
+
+            formData.append("counting_group_id", cig)
+            formData.append("picture", file);
+
+            setState("uploading");
+
+            fetch("/kubis/action/inference", {
+                method: "POST",
+                body: formData,
+            }).then(async res => {
+                if (res.ok) {
+                    setState("uploaded");
+
+                    const data = await res.json();
+                    const count = data.count;
+                    const av_confidence = data.average_confidence;
+                    const image = data.image;
+                    
+                    // metadata 
+                    const metadata = data.metadata;
+                    let latitude = `${metadata.gps.lat} ${metadata.gps.lat_ref}`
+
+                    let longtitude = `${metadata.gps.long} ${metadata.gps.long_ref}`
+                    
+                    document.getElementById("metadata_lat").innerHTML = latitude
+                    document.getElementById("metadata_long").innerHTML = longtitude
+                    document.getElementById("metadata_card").classList.remove("hidden")
+                    document.getElementById("metadata_height").innerHTML = `${metadata.gps.alt[0] / metadata.gps.alt[1]} M`
+                    document.getElementById("metadata_date").innerHTML = `${metadata.datetime}`
+
+                    // Clean up styling
+                    drop_zone.classList.remove("bg-red-300", "border-red-500", "bg-yellow-200", "border-yellow-500");
+                    drop_zone_msg.innerHTML = "";
+
+                    const image_el = document.createElement("img");
+                    image_el.src = image;
+                    image_el.className = "w-full h-auto rounded w-full h-full object-fit rounded-b-lg";
+
+                    const info = document.createElement("div");
+                    info.className = "absolute bottom-0 left-0 right-0 bg-white p-4 bg-lime-900 shadow-lg text-center";
+                    
+                    drop_zone.classList.add("border-4")
+                    drop_zone.classList.add("border-lime-900");
+
+                    info.innerHTML = `
+                        <p class="text-lg text-lime-200 font-semibold">Label: ${count}</p>
+                        <p class="text-sm text-lime-200 text-gray-700">Confidence: ${av_confidence}% <br> <a href="javascript:location.reload()" class="font-bold underline">lakukan perhitungan lagi</a></p>
+                    `; 
+
+                    drop_zone.innerHTML = "";
+                    drop_zone.appendChild(image_el);
+                    drop_zone.appendChild(info);
+
+                    drop_zone.replaceWith(drop_zone.cloneNode(true));
+                   } else {
+                    setState("error");
+                    drop_zone.classList.add("bg-red-300");
+                    drop_zone.classList.add("border-2");
+                    drop_zone.classList.add("border-red-500");
+                    drop_zone_msg.innerHTML = "Gagal mengupload file, tekan untuk mencoba lagi";
+                }
+                })
+                .catch(() => setState("error"));
+        }
+
+        function summonFilePickerUpload() {
+            if(document.getElementById('count-group-select').value === "none"){
+                alert("Pilih grup perhitungan terlebih dahulu!")
+                return;
+            }
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*";
+
+            input.addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file){
+                    handleFileUpload(file);
+                }
+            });
+
+            input.click();
+        }
+
+        function setState(state){
+            drop_zone.classList.remove("no_up", "uploading", "uploaded", "error")
+            drop_zone.classList.add(state);
+            up_state = state;
+
+            if (state === "uploading") {
+                drop_zone.classList.add("bg-yellow-200");
+                drop_zone.classList.add("border-2");
+                drop_zone.classList.add("border-yellow-500");
+                drop_zone_msg.innerHTML = "Mengupload file...";
+            }
+        }
+
+        drop_zone.addEventListener("click", summonFilePickerUpload)
+        drop_zone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            drop_zone.classList.add("bg-lime-300");
+            drop_zone.classList.add("border-2")
+        })
+
+        drop_zone.addEventListener("dragleave", (e) => {
+            drop_zone.classList.remove("bg-lime-300");
+            drop_zone.classList.remove("border-2");
+        })
+
+        drop_zone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            drop_zone.classList.remove("bg-lime-300");
+            drop_zone.classList.remove("border-2");
+            handleFileUpload(e.dataTransfer.files[0])
+        })
+
+        file_input.addEventListener("change", () => {
+            if(file_input.files.length > 0){
+                handleFileUpload(file_input.files[0])
+            }
+        })
+
+        const toggleButton = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+    
+        toggleButton.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+
+        const profileMenu = document.getElementById('profile_menu');
+        const profileDropdown = document.getElementById('profile_dropdown');
+
+        profileMenu.addEventListener('click', () => {
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', (event) => {
+            if (!profileMenu.contains(event.target) && !profileDropdown.contains(event.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        document.getElementById("new_counting_group_form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const form = e.target;
+        const data = {
+            counting_group_name: form['counting-group-name'].value,
+            date: form['date'].value,
+        }
+
+        try {
+            const response = await fetch('/kubis/action/add_counting_group', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+
+            if(response.ok){
+                alert("Berhasil menambahkan counting group");
+                form.reset();
+                location.reload();
+            }else{
+                const body = await response.json();
+                const err = body.error;
+                alert('Gagal menambahkan counting group, galat : ' + err)
+            }
+            }catch(err){
+                console.error('Request failed', err);
+                alert('An error occuring while submit')
+            }
+        })
+
+    </script>
+    </body>
+</html>

@@ -45,7 +45,7 @@ def history_detail(id):
 
     print(info)
 
-    return render_template('kubis/history_detail.html', his=rows, info=info)
+    return render_template('history_detail.html', his=rows, info=info)
 
 def history():
     conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../database', 'logs.db'))
@@ -59,7 +59,7 @@ def history():
     print(rows)
     conn.close()
 
-    return render_template('kubis/history.html', his=rows)
+    return render_template('history.html', his=rows)
 
 def add_counting_group():
     if request.method == 'POST':
