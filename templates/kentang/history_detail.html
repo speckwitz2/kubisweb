@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <title>Detail perhitungan</title>
+</head>
+<body class="h-screen ">    
+    <header class="fixed top-0 right-0 left-0 z-10 container mx-auto">
+        <nav class="bg-white border shadow-xl mx-6 my-4 rounded-lg">
+            <div class="flex justify-between h-16 px-5">
+                <div class="flex">
+                    <a href="#" class="flex items-center text-xl font-bold text-green-600">TSTH2</a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="/" class="text-gray-700 hover:text-green-700 hover:font-bold">Home</a>
+
+                    <div class="relative inline-block text-left">
+                        <!-- Summoner -->
+                        <a href="/kentang/count" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                          Halaman Perhitungan
+                        </a>
+                                          </div>
+        
+                    <div class="relative inline-block text-left">
+                        <a href="/kentang/history" id="kentang_menu" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                            Sejarah
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#" id="profile_menu" class="text-gray-700 hover:text-green-700 hover:font-bold text-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                          </svg>    
+                    </a>
+                    <div id="profile_dropdown" class="absolute hidden bg-white shadow-2xl border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Settings</a>
+                        <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
+                    </div>
+                </div> 
+
+            <div class="md:hidden flex items-center">
+                <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+            </div>
+
+            <div id="kentang_submenu" class="absolute hidden bg-white shadow-2xl border-gray-300 border rounded-lg mt-10 w-36 top-9 right-0">
+                <a href="/settings" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Settings</a>
+                <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:font-bold">Logout</a>
+            </div>
+
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-4 p-4 mx-6 border border-gray-300 space-y-6 bg-white rounded-lg shadow-2xl">
+            <a href="/" class="block text-gray-700 hover:text-green-700">Home</a>
+
+            <a href="/kentang/count" class="block text-gray-700 hover hover:text-green-700">Halam Perhitungan</a>
+
+            <a href="/kentang/history" class="block text-gray-700 hover hover:text-green-700">Sejarah</a>
+
+            <details class="group">
+                <summary class="text-gray-700 hover hover:text-green-700 flex items-center justify-between cursor-pointer list-none">
+                    Profile
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                      </svg>    
+                </summary>
+                <div class="pl-5 mt-2 space-y-3">
+                    <a href="/settings" class="block text-gray-700 hover hover:text-green-700">Settings</a>
+                    <a href="/logout" class="block text-gray-700 hover:font-bold hover:text-red-600">Logout</a>
+                </div>
+            </details>
+        </div>
+
+    </header>  
+
+    <div class="container mx-auto pt-20">
+        <h1 class="font-bold text-4xl m-6">Riwayat</h1>
+        
+    <div class="container mx-auto">
+        <div class="flex flex-col m-6">
+            <div class="flex lg:flex-row flex-row gap-5">
+                <div class="card shadow-2xl border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                    <div class="flex flex-col" style="overflow-y: scroll;">
+                        <h2 class="text-lg relative flex flex-col w-full">
+                            Tanggal perhitungan
+                        </h2>
+                        <p class="text-2xl font-bold">{{ info[1] }}</p>
+                    </div>
+                </div>
+
+                <div class="card shadow-2xl border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                    <div class="flex flex-col" style="overflow-y: scroll;">
+                        <h2 class="text-lg relative w-full">
+                            Rata-rata <i>confidence</i>
+                        </h2>
+                        <p class="text-2xl font-bold">{{ info[2] }}</p>
+                    </div>
+                </div>
+
+                <div class="card shadow-2xl border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
+                    <div class="flex flex-col" style="overflow-y: scroll;">
+                        <h2 class="text-lg relative w-full">
+                            Total perhitungan
+                        </h2>
+                        <p class="text-2xl font-bold">{{ info[3] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="container mx-auto">
+        <div class="flex flex-col m-6">
+            <div class="flex lg:flex-row flex-col gap-5">
+                <div class="card shadow-2xl border border-gray-300 duration-150 rounded-lg flex-grow flex-1 p-7" style="overflow-y: scroll;">
+                    <div class="flex flex-col" >
+                        <h2 class="text-2xl font-bold relative pb-5 flex flex-col w-full">
+                            Data hasil perhitungan kubis
+                        </h2>
+                        <table class="table-auto w-full border-separate border-spacing-0 pr-7">
+                            <thead>
+                                <tr class="border-b">
+                                    <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-gray-100">Tanggal Perhitungan</th>
+                                    <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-gray-100">Rata-rata confidence</th>
+                                    
+                                    <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-green-100">Total Jumlah</th>
+                                    <th class="text-gray-700 hover:text-green-700 hover:font-bold text-center px-4 py-2 bg-blue-100">Latitude</th>
+                                    <th class="text-gray-700 hover:text-orange-700 hover:font-bold text-center px-4 py-2 bg-orange-100">Longtitude</th>
+                                    <th class="text-gray-700 hover:text-yellow-700 hover:font-bold text-center px-4 py-2 bg-yellow-100">Altitude</th>
+                                    <th class="text-gray-700 hover:text-gray-700 hover:font-bold text-center px-4 py-2 bg-gray-100">Gambar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in his %}
+                                    <tr class="border-b">
+                                        <td class="text-center px-4 py-2 bg-gray-50">{{ i[2] }}</td>
+                                        <td class="text-center px-4 py-2 bg-gray-50">{{ i[3] }}</td>
+                                        <td class="text-center px-4 py-2 bg-green-50">{{ i[4] }}</td>
+                                        <td class="text-center px-4 py-2 bg-blue-50">{{ i[5] }} {{ i[6] }}</td>
+                                        <td class="text-center px-4 py-2 bg-orange-50">{{ i[7] }} {{ i[8] }}</td>
+                                        <td class="text-center px-4 py-2 bg-yellow-50">{{ i[9] }}</td>
+                                       <td class="text-center px-4 py-2 bg-gray-50">
+                                        <img src="data:image/jpeg;base64,{{ i[15] }}" 
+                                            class="w-20 hover:scale-105 transition cursor-pointer" 
+                                            onclick="showImage('data:image/jpeg;base64,{{ i[15] }}')">
+
+                                        <img src="data:image/jpeg;base64,{{ i[17] }}" 
+                                            class="w-20 mt-2 hover:scale-105 transition cursor-pointer" 
+                                            onclick="showImage('data:image/jpeg;base64,{{ i[17] }}')">
+                                    </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>                        
+                    </div>
+                </div>    
+            </div>
+        </div>
+
+    <div class="container mx-auto">
+        <div class="flex flex-row items-center justify-center p-3 mb-5 mx-6 pb-6 rounded-lg">
+            <p><b>Developed by D3TI TA 2025 Group 06</b></p>
+        </div>
+    </div>
+    <div id="imageViewer" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+    <img id="viewerImage" src="" class="max-w-full max-h-full rounded shadow-lg border-4 border-white">
+    </div>
+
+    <script>
+        const toggleButton = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+    
+        toggleButton.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+
+        const profileMenu = document.getElementById('profile_menu');
+        const profileDropdown = document.getElementById('profile_dropdown');
+
+        profileMenu.addEventListener('click', () => {
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', (event) => {
+            if (!profileMenu.contains(event.target) && !profileDropdown.contains(event.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+    </script>
+    <script>
+    const viewer = document.getElementById("imageViewer");
+    const viewerImage = document.getElementById("viewerImage");
+
+    function showImage(src) {
+        viewerImage.src = src;
+        viewer.classList.remove("hidden");
+    }
+
+    // Tutup modal kalau klik di luar gambar
+    viewer.addEventListener("click", function (e) {
+        if (e.target === viewer) {
+            viewer.classList.add("hidden");
+            viewerImage.src = "";
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+services:
+  kubisweb:
+    labels:
+      - com.host.description=label
+    build: .
+    image: ghcr.io/spikycar/kubisweb:latest
+    ports: 
+      - "5000:5000"
+    volumes:
+      - "./model/weights:/app/model/weights"
+      - "./database:/app/database"
+      - "result_image_storage:/app/static/result"
+    env_file:
+      - .env
+
+volumes:
+  result_image_storage:

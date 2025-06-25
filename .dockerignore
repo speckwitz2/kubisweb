@@ -6,3 +6,14 @@ experiment/
 database/logs.db
 .env
 database/dummy.py
+
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.o
+.git/
+.gitignore
+*.ipynb
+*.pt
+*.pth
