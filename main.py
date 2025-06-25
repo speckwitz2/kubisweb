@@ -3,6 +3,8 @@ from flask.json.provider import DefaultJSONProvider as BaseProvider
 
 import sqlite3, base64, os, json
 import route_functions as rf
+from route_functions.authentication import requires_auth
+from route_functions import inference_kentang
 from os import environ as env
 from urllib.parse import quote_plus, urlencode
 from authlib.integrations.flask_client import OAuth
@@ -45,6 +47,37 @@ cursor.execute('''
                 alt REAL NOT NULL,
                 image_name TEXT NOT NULL,
                 FOREIGN KEY (group_id) REFERENCES counting_group(id)
+    );
+''')
+
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS counting_group_kentang (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        date DATETIME NOT NULL);
+''')
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS counting_kentang (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        group_id INTEGER NOT NULL,
+        date DATETIME NOT NULL,
+        conf_average REAL NOT NULL,
+        count INTEGER NOT NULL,
+        lat REAL NOT NULL,
+        lat_ref TEXT NOT NULL,
+        long REAL NOT NULL,
+        long_ref TEXT NOT NULL,
+        alt REAL NOT NULL,
+        image_name TEXT NOT NULL,
+        zona_sehat_percent REAL,
+        zona_tidak_sehat_percent REAL,
+        sehat_zones INTEGER,
+        sakit_zones INTEGER,
+        img_original_rgb TEXT,
+        img_overlay_result TEXT,
+        img_overlay_before TEXT,
+        img_overlay_after TEXT,
+        FOREIGN KEY (group_id) REFERENCES counting_group_kentang(id)
     );
 ''')
 
@@ -132,6 +165,13 @@ def callback():
 
 
 app.route('/')(rf.index)
+app.route('/kentang/count')(rf.requires_auth(rf.kentang))
+app.route('/kentang/history')(rf.requires_auth(rf.history_kentang))
+app.route('/kentang/history/detail/<int:id>')(rf.requires_auth(rf.history_detail_kentang))
+app.route('/kentang/history/delete/<int:id>')(rf.requires_auth(rf.history_delete_kentang))
+
+app.route('/kentang/action/add_counting_group', methods=['POST'])(rf.add_counting_group_kentang)
+app.route('/kentang/detect', methods=['POST'])(rf.requires_auth(rf.inference_kentang))
 
 app.route('/kubis/count')(rf.requires_auth(rf.count))
 app.route('/kubis/history')(rf.requires_auth(rf.history))
@@ -140,6 +180,7 @@ app.route('/kubis/history/delete/<int:id>')(rf.requires_auth(rf.history_delete))
 
 app.route('/kubis/action/add_counting_group', methods=['POST'])(rf.add_counting_group)
 app.route('/kubis/action/inference', methods=['POST'])(rf.inference)
+
 
 
 if __name__ == "__main__":

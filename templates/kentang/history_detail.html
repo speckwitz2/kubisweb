@@ -26,13 +26,13 @@
 
                     <div class="relative inline-block text-left">
                         <!-- Summoner -->
-                        <a href="/kubis/count" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                        <a href="/kentang/count" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
                           Halaman Perhitungan
                         </a>
                                           </div>
         
                     <div class="relative inline-block text-left">
-                        <a href="/kubis/history" id="kentang_menu" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                        <a href="/kentang/history" id="kentang_menu" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
                             Sejarah
                         </a>
                     </div>
@@ -69,9 +69,9 @@
         <div id="mobile-menu" class="hidden md:hidden px-4 p-4 mx-6 border border-gray-300 space-y-6 bg-white rounded-lg shadow-2xl">
             <a href="/" class="block text-gray-700 hover:text-green-700">Home</a>
 
-            <a href="/kubis/count" class="block text-gray-700 hover hover:text-green-700">Halam Perhitungan</a>
+            <a href="/kentang/count" class="block text-gray-700 hover hover:text-green-700">Halam Perhitungan</a>
 
-            <a href="/kubis/history" class="block text-gray-700 hover hover:text-green-700">Sejarah</a>
+            <a href="/kentang/history" class="block text-gray-700 hover hover:text-green-700">Sejarah</a>
 
             <details class="group">
                 <summary class="text-gray-700 hover hover:text-green-700 flex items-center justify-between cursor-pointer list-none">
@@ -157,11 +157,15 @@
                                         <td class="text-center px-4 py-2 bg-blue-50">{{ i[5] }} {{ i[6] }}</td>
                                         <td class="text-center px-4 py-2 bg-orange-50">{{ i[7] }} {{ i[8] }}</td>
                                         <td class="text-center px-4 py-2 bg-yellow-50">{{ i[9] }}</td>
-                                        <td class="text-center px-4 py-2 bg-gray-50">
-                                            <a href="/static/result/{{ i[10] }}" target="_blank">
-                                                <img src="/static/result/{{ i[10] }}" class="w-20">
-                                            </a>
-                                        </td>
+                                       <td class="text-center px-4 py-2 bg-gray-50">
+                                        <img src="data:image/jpeg;base64,{{ i[15] }}" 
+                                            class="w-20 hover:scale-105 transition cursor-pointer" 
+                                            onclick="showImage('data:image/jpeg;base64,{{ i[15] }}')">
+
+                                        <img src="data:image/jpeg;base64,{{ i[17] }}" 
+                                            class="w-20 mt-2 hover:scale-105 transition cursor-pointer" 
+                                            onclick="showImage('data:image/jpeg;base64,{{ i[17] }}')">
+                                    </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -175,6 +179,9 @@
         <div class="flex flex-row items-center justify-center p-3 mb-5 mx-6 pb-6 rounded-lg">
             <p><b>Developed by D3TI TA 2025 Group 06</b></p>
         </div>
+    </div>
+    <div id="imageViewer" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+    <img id="viewerImage" src="" class="max-w-full max-h-full rounded shadow-lg border-4 border-white">
     </div>
 
     <script>
@@ -198,5 +205,22 @@
             }
         });
     </script>
+    <script>
+    const viewer = document.getElementById("imageViewer");
+    const viewerImage = document.getElementById("viewerImage");
+
+    function showImage(src) {
+        viewerImage.src = src;
+        viewer.classList.remove("hidden");
+    }
+
+    // Tutup modal kalau klik di luar gambar
+    viewer.addEventListener("click", function (e) {
+        if (e.target === viewer) {
+            viewer.classList.add("hidden");
+            viewerImage.src = "";
+        }
+    });
+</script>
 </body>
 </html>

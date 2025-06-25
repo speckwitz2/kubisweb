@@ -17,7 +17,7 @@ def validate_token(token):
         "Authorization" : f"Bearer {token}"
     }
 
-    response = requests.get(f"https://{env.get("AUTH0_DOMAIN")}/userinfo", headers=headers)
+    response = requests.get(f"https://{env.get('AUTH0_DOMAIN')}/userinfo", headers=headers)
     if response.status_code == 200:
         userinfo = response.json()
         print(userinfo)
