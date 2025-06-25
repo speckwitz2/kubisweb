@@ -4,9 +4,12 @@ from detectron2.data import MetadataCatalog
 import numpy as np
 import supervision as sv
 import time
-import cv2
-
+import numpy as np
 from collections import Counter
+import requests
+import os
+
+api_url = os.environ.get("KENTANG_SUBSYSTEM_API")
 
 def partDetectionCallback(image_slice: np.ndarray) -> sv.Detections:
   try:
@@ -67,3 +70,36 @@ def doDetection(image: np.ndarray, slice_wh=(512, 512)):
   except Exception as e:
     print(f"[ERROR in partDetectionCallback] {e}")
     return image
+  
+def process_ndre_and_classify(nir_path, red_path, red_edge_path, original_rgb_path):
+    file_handles = {}
+    try:
+        # Buka semua file dan simpan handle-nya
+        file_handles['nir'] = open(nir_path, 'rb')
+        file_handles['red'] = open(red_path, 'rb')
+        file_handles['red_edge'] = open(red_edge_path, 'rb')
+        file_handles['rgb'] = open(original_rgb_path, 'rb')
+
+        # Kirim request ke API
+        response = requests.post(f"{api_url}/model/inference", files=file_handles)
+
+        if response.status_code == 200:
+            print("[INFO] Kentang inference success.")
+            return response.json()
+        else:
+            print(f"[ERROR] Kentang API failed: {response.status_code} - {response.text}")
+            return None
+
+    except FileNotFoundError as fnf_err:
+        print(f"[EXCEPTION] File tidak ditemukan: {fnf_err}")
+        return None
+    except Exception as e:
+        print(f"[EXCEPTION] Saat memanggil kentang API: {e}")
+        return None
+    finally:
+        # Tutup semua file handle dengan aman
+        for f in file_handles.values():
+            try:
+                f.close()
+            except Exception as close_err:
+                print(f"[WARNING] Gagal menutup file: {close_err}")

@@ -32,13 +32,13 @@
 
                     <div class="relative inline-block text-left">
                         <!-- Summoner -->
-                        <a href="/kubis/count" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                        <a href="/kentang/count" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
                           Halaman Perhitungan
                         </a>
                                           </div>
         
                     <div class="relative inline-block text-left">
-                        <a href="/kubis/history" id="kentang_menu" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                        <a href="/kentang/history" id="kentang_menu" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
                             Sejarah
                         </a>
                     </div>
@@ -75,9 +75,9 @@
         <div id="mobile-menu" class="hidden md:hidden px-4 p-4 mx-6 border border-gray-300 space-y-6 bg-white rounded-lg shadow-2xl">
             <a href="/" class="block text-gray-700 hover:text-green-700">Home</a>
 
-            <a href="/kubis/count" class="block text-gray-700 hover hover:text-green-700">Halam Perhitungan</a>
+            <a href="/kentang/count" class="block text-gray-700 hover hover:text-green-700">Halam Perhitungan</a>
 
-            <a href="/kubis/history" class="block text-gray-700 hover hover:text-green-700">Sejarah</a>
+            <a href="/kentang/history" class="block text-gray-700 hover hover:text-green-700">Sejarah</a>
 
             <details class="group">
                 <summary class="text-gray-700 hover hover:text-green-700 flex items-center justify-between cursor-pointer list-none">
@@ -96,30 +96,101 @@
 
     </header>    
 
-    <div class="mt-[110px]">
-        <div class="container mx-auto">
-            <h1 class="font-bold text-4xl m-6">Perhitungan Kubis</h1>
-            <div class="flex flex-col m-6 h-2vh">
-                <div class="flex lg:flex-row flex-col gap-5">
-                    <div class="card shadow-lg border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
-                        <h2 class="text-2xl font-bold relative pb-5 flex flex-col">
-                            Tambah perhitungan kubis
-                        </h2>
-                        <select name="count-group-select" id="count-group-select" class="px-3 py-2 mb-5 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-600 focus:border-green-500 w-full">
-                            <option value="none">Select counting group</option>
-                            {% for i in count_group %}
-                                <option value="{{ i[0] }}"> {{ i[1] }} 📅 {{ i[2][:10] }} </option>
-                            {% endfor %}
-                        </select>
-                        <div id="drop-zone" class="w-full aspect-square lg:h-[60vh] md:h-[50vh] flex-1 bg-lime-200 rounded-lg border-lime-500 flex justify-center items-center relative transition duration-150">
-                            <input type="file" id="file-input" name="file" class="hidden" />
-                            <span class="font-bold" id="drop-zone-msg">Drop gambar disini atau klik untuk upload</span>
-                        </div>
-                    </div> 
-                </div>
+  <div class="mt-[110px]">
+  <div class="container mx-auto">
+    <h1 class="font-bold text-4xl m-6">Pendeteksian Penyakit Kentang</h1>
+    <div class="flex flex-col m-6">
+      <div class="flex flex-col lg:flex-row gap-5">
+        <div class="card shadow-lg border border-gray-300 p-7 rounded-2xl flex-grow">
+
+          <form method="POST" action="/kentang/detect" enctype="multipart/form-data"
+            class="bg-white shadow-xl border border-gray-200 px-8 py-10 rounded-2xl w-full max-w-2xl mx-auto space-y-6">
+
+            <h2 class="text-2xl font-bold text-gray-800 text-center mb-4"> Form Deteksi Penyakit Kentang</h2>
+
+            <div>
+              <label for="count-group-select" class="text-sm text-gray-600 font-medium block mb-1">Kelompok Counting</label>
+              <select name="counting_group_id" id="count-group-select" required
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm">
+                <option value="">Pilih kelompok counting</option>
+                {% for i in count_group %}
+                <option value="{{ i[0] }}"> {{ i[1] }} 🗕️ {{ i[2][:10] }} </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="text-sm text-gray-600 font-medium block mb-1">Citra Asli (RGB)</label>
+                <input type="file" name="rgb" accept=".tif,.png,.jpg" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm bg-white focus:ring-2 focus:ring-green-500">
+              </div>
+
+              <div>
+                <label class="text-sm text-gray-600 font-medium block mb-1">Band NIR</label>
+                <input type="file" name="nir" accept=".tif,.png,.jpg" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm bg-white focus:ring-2 focus:ring-green-500">
+              </div>
+
+              <div>
+                <label class="text-sm text-gray-600 font-medium block mb-1">Band Red</label>
+                <input type="file" name="red" accept=".tif,.png,.jpg" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm bg-white focus:ring-2 focus:ring-green-500">
+              </div>
+
+              <div>
+                <label class="text-sm text-gray-600 font-medium block mb-1">Band Red Edge</label>
+                <input type="file" name="red_edge" accept=".tif,.png,.jpg" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm bg-white focus:ring-2 focus:ring-green-500">
+              </div>
+            </div>
+
+            <div class="pt-4">
+              <button type="submit"
+                class="w-full bg-green-600 hover:bg-green-700 text-white text-base font-semibold py-3 rounded-lg transition duration-300 shadow-md">
+                Proses NDRE dan Klasifikasi
+              </button>
+            </div>
+
+          </form>
+
         </div>
+      </div>
+    </div>
+  </div>
+  <div id="result-container" class="hidden container mx-auto my-8">
+    <h2 class="text-2xl font-bold text-center text-green-700 mb-4">Hasil Deteksi NDRE & Klasifikasi</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="text-center">
+            <h3 class="font-semibold text-gray-600 mb-2">Citra Asli (RGB)</h3>
+            <img id="img-original" class="rounded-lg shadow-md max-w-full" />
+        </div>
+        <div class="text-center">
+            <h3 class="font-semibold text-gray-600 mb-2">Overlay Hasil Klasifikasi</h3>
+            <img id="img-overlay-result" class="rounded-lg shadow-md max-w-full" />
+        </div>
+        <div class="text-center">
+            <h3 class="font-semibold text-gray-600 mb-2">Overlay NDRE (sebelum klasifikasi)</h3>
+            <img id="img-overlay-before" class="rounded-lg shadow-md max-w-full" />
+        </div>
+        <div class="text-center">
+            <h3 class="font-semibold text-gray-600 mb-2">Overlay Akhir</h3>
+            <img id="img-overlay-after" class="rounded-lg shadow-md max-w-full" />
         </div>
     </div>
+
+    <div class="bg-gray-100 p-6 rounded-xl shadow">
+        <h4 class="font-bold text-gray-700 mb-2">Metadata</h4>
+        <p><b>Latitude:</b> <span id="meta-lat"></span></p>
+        <p><b>Longitude:</b> <span id="meta-long"></span></p>
+        <p><b>Tinggi Drone:</b> <span id="meta-alt"></span> meter</p>
+        <p><b>Tanggal Pengambilan:</b> <span id="meta-datetime"></span></p>
+        <p><b>Jumlah Zona:</b> <span id="meta-numzones"></span></p>
+        <p><b>Confidence Rata-rata:</b> <span id="meta-conf"></span></p>
+    </div>
+</div>
+
 
     <div class="container mx-auto" id="if-you-forget">
             <div class="flex flex-col m-6 h-2vh">
@@ -204,200 +275,98 @@
             <p><b>Developed by D3TI TA 2025 Group 06</b></p>
         </div>
     </div>
-    
     <script>
+    function toggle_new_cg_fm() {
+        const form = document.getElementById("new_counting_group_form");
+        form.classList.toggle("hidden");
+    }
 
-        function toggle_new_cg_fm(){
-            const form = document.getElementById("new_counting_group_form")
-            form.classList.toggle("hidden");
-        }
-
-        const drop_zone = document.getElementById("drop-zone")
-        const file_input = document.getElementById("file-input")
-        const drop_zone_msg = document.getElementById("drop-zone-msg")
-
-        let up_state = "no_up"
-        function handleFileUpload(file) {
-            const formData = new FormData();
-
-            document.getElementById("if-you-forget").classList.add("hidden")
-
-
-            let cig = document.getElementById("count-group-select").value
-
-            formData.append("counting_group_id", cig)
-            formData.append("picture", file);
-
-            setState("uploading");
-
-            fetch("/kubis/action/inference", {
-                method: "POST",
-                body: formData,
-            }).then(async res => {
-                if (res.ok) {
-                    setState("uploaded");
-
-                    const data = await res.json();
-                    const count = data.count;
-                    const av_confidence = data.average_confidence;
-                    const image = data.image;
-                    
-                    // metadata 
-                    const metadata = data.metadata;
-                    let latitude = `${metadata.gps.lat} ${metadata.gps.lat_ref}`
-
-                    let longtitude = `${metadata.gps.long} ${metadata.gps.long_ref}`
-                    
-                    document.getElementById("metadata_lat").innerHTML = latitude
-                    document.getElementById("metadata_long").innerHTML = longtitude
-                    document.getElementById("metadata_card").classList.remove("hidden")
-                    document.getElementById("metadata_height").innerHTML = `${metadata.gps.alt[0] / metadata.gps.alt[1]} M`
-                    document.getElementById("metadata_date").innerHTML = `${metadata.datetime}`
-
-                    // Clean up styling
-                    drop_zone.classList.remove("bg-red-300", "border-red-500", "bg-yellow-200", "border-yellow-500");
-                    drop_zone_msg.innerHTML = "";
-
-                    const image_el = document.createElement("img");
-                    image_el.src = image;
-                    image_el.className = "w-full h-auto rounded w-full h-full object-fit rounded-b-lg";
-
-                    const info = document.createElement("div");
-                    info.className = "absolute bottom-0 left-0 right-0 bg-white p-4 bg-lime-900 shadow-lg text-center";
-                    
-                    drop_zone.classList.add("border-4")
-                    drop_zone.classList.add("border-lime-900");
-
-                    info.innerHTML = `
-                        <p class="text-lg text-lime-200 font-semibold">Label: ${count}</p>
-                        <p class="text-sm text-lime-200 text-gray-700">Confidence: ${av_confidence}% <br> <a href="javascript:location.reload()" class="font-bold underline">lakukan perhitungan lagi</a></p>
-                    `; 
-
-                    drop_zone.innerHTML = "";
-                    drop_zone.appendChild(image_el);
-                    drop_zone.appendChild(info);
-
-                    drop_zone.replaceWith(drop_zone.cloneNode(true));
-                   } else {
-                    setState("error");
-                    drop_zone.classList.add("bg-red-300");
-                    drop_zone.classList.add("border-2");
-                    drop_zone.classList.add("border-red-500");
-                    drop_zone_msg.innerHTML = "Gagal mengupload file, tekan untuk mencoba lagi";
-                }
-                })
-                .catch(() => setState("error"));
-        }
-
-        function summonFilePickerUpload() {
-            if(document.getElementById('count-group-select').value === "none"){
-                alert("Pilih grup perhitungan terlebih dahulu!")
-                return;
-            }
-            const input = document.createElement("input");
-            input.type = "file";
-            input.accept = "image/*";
-
-            input.addEventListener("change", (e) => {
-                const file = e.target.files[0];
-                if (file){
-                    handleFileUpload(file);
-                }
-            });
-
-            input.click();
-        }
-
-        function setState(state){
-            drop_zone.classList.remove("no_up", "uploading", "uploaded", "error")
-            drop_zone.classList.add(state);
-            up_state = state;
-
-            if (state === "uploading") {
-                drop_zone.classList.add("bg-yellow-200");
-                drop_zone.classList.add("border-2");
-                drop_zone.classList.add("border-yellow-500");
-                drop_zone_msg.innerHTML = "Mengupload file...";
-            }
-        }
-
-        drop_zone.addEventListener("click", summonFilePickerUpload)
-        drop_zone.addEventListener("dragover", (e) => {
-            e.preventDefault();
-            drop_zone.classList.add("bg-lime-300");
-            drop_zone.classList.add("border-2")
-        })
-
-        drop_zone.addEventListener("dragleave", (e) => {
-            drop_zone.classList.remove("bg-lime-300");
-            drop_zone.classList.remove("border-2");
-        })
-
-        drop_zone.addEventListener("drop", (e) => {
-            e.preventDefault();
-            drop_zone.classList.remove("bg-lime-300");
-            drop_zone.classList.remove("border-2");
-            handleFileUpload(e.dataTransfer.files[0])
-        })
-
-        file_input.addEventListener("change", () => {
-            if(file_input.files.length > 0){
-                handleFileUpload(file_input.files[0])
-            }
-        })
-
-        const toggleButton = document.getElementById('menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-    
-        toggleButton.addEventListener('click', () => {
-          mobileMenu.classList.toggle('hidden');
-        });
-
-        const profileMenu = document.getElementById('profile_menu');
-        const profileDropdown = document.getElementById('profile_dropdown');
-
-        profileMenu.addEventListener('click', () => {
-            profileDropdown.classList.toggle('hidden');
-        });
-
-        window.addEventListener('click', (event) => {
-            if (!profileMenu.contains(event.target) && !profileDropdown.contains(event.target)) {
-                profileDropdown.classList.add('hidden');
-            }
-        });
-
-        document.getElementById("new_counting_group_form").addEventListener("submit", async function (e) {
+    document.getElementById("new_counting_group_form").addEventListener("submit", async function (e) {
         e.preventDefault();
         const form = e.target;
         const data = {
             counting_group_name: form['counting-group-name'].value,
             date: form['date'].value,
-        }
+        };
 
         try {
-            const response = await fetch('/kubis/action/add_counting_group', {
+            const response = await fetch('/kentang/action/add_counting_group', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
-            })
+            });
 
-            if(response.ok){
-                alert("Berhasil menambahkan counting group");
+            if (response.ok) {
+                alert("Berhasil menambahkan kelompok perhitungan.");
                 form.reset();
                 location.reload();
-            }else{
+            } else {
                 const body = await response.json();
                 const err = body.error;
-                alert('Gagal menambahkan counting group, galat : ' + err)
+                alert('Gagal menambahkan kelompok: ' + err);
             }
-            }catch(err){
-                console.error('Request failed', err);
-                alert('An error occuring while submit')
-            }
-        })
+        } catch (err) {
+            console.error('Request gagal', err);
+            alert('Terjadi kesalahan saat mengirim data');
+        }
+    });
+</script>
+<script>
+document.querySelector('form[action="/kentang/detect"]').addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-    </script>
+    const form = e.target;
+    const formData = new FormData(form);
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Memproses...";
+
+    try {
+        const response = await fetch(form.action, {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert("Gagal memproses gambar: " + (data.error || "Unknown Error"));
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Proses NDRE dan Klasifikasi";
+            return;
+        }
+
+        // Tampilkan gambar hasil
+        document.getElementById("img-original").src = "data:image/png;base64," + data.images.original_rgb;
+        document.getElementById("img-overlay-result").src = "data:image/png;base64," + data.images.overlay_result;
+        document.getElementById("img-overlay-before").src = "data:image/png;base64," + data.images.overlay_before;
+        document.getElementById("img-overlay-after").src = "data:image/png;base64," + data.images.overlay_after;
+
+        // Tampilkan metadata
+        const md = data.metadata;
+        const gps = md.gps || {};
+        const summary = md.summary || {};
+
+        document.getElementById("meta-lat").textContent = gps.lat ?? "Tidak tersedia";
+        document.getElementById("meta-long").textContent = gps.long ?? "Tidak tersedia";
+        document.getElementById("meta-alt").textContent = gps.alt ?? "-";
+        document.getElementById("meta-datetime").textContent = md.datetime ?? "-";
+        document.getElementById("meta-numzones").textContent = summary.num_zones ?? "-";
+        document.getElementById("meta-conf").textContent = (summary.mean_confidence ?? 0).toFixed(2);
+
+        // Tampilkan hasil
+        document.getElementById("result-container").classList.remove("hidden");
+
+    } catch (err) {
+        console.error(err);
+        alert("Terjadi kesalahan saat mengirim permintaan.");
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Proses NDRE dan Klasifikasi";
+    }
+});
+</script>
     </body>
 </html>
