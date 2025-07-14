@@ -31,13 +31,13 @@
 
                     <div class="relative inline-block text-left">
                         <!-- Summoner -->
-                        <a href="/kubis/count" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                        <a href="/kentang/count" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
                           Halaman Perhitungan
                         </a>
                                           </div>
         
                     <div class="relative inline-block text-left">
-                        <a href="/kubis/history" id="kentang_menu" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
+                        <a href="/kentang/history" id="kentang_menu" class="text-gray-700 hover:text-green-700 hover:font-bold inline-flex items-center">
                             Sejarah
                         </a>
                     </div>
@@ -74,9 +74,9 @@
         <div id="mobile-menu" class="hidden md:hidden px-4 p-4 mx-6 border border-gray-300 space-y-6 bg-white rounded-lg shadow-2xl">
             <a href="/" class="block text-gray-700 hover:text-green-700">Home</a>
 
-            <a href="/kubis/count" class="block text-gray-700 hover hover:text-green-700">Halam Perhitungan</a>
+            <a href="/kentang/count" class="block text-gray-700 hover hover:text-green-700">Halam Perhitungan</a>
 
-            <a href="/kubis/history" class="block text-gray-700 hover hover:text-green-700">Sejarah</a>
+            <a href="/kentang/history" class="block text-gray-700 hover hover:text-green-700">Sejarah</a>
 
             <details class="group">
                 <summary class="text-gray-700 hover hover:text-green-700 flex items-center justify-between cursor-pointer list-none">
@@ -149,7 +149,7 @@
                 <div class="card shadow-2xl border border-gray-300 duration-150 p-7 rounded-lg flex-grow flex-1">
                     <div class="flex flex-col">
                         <h2 class="text-2xl font-bold relative pb-5 flex flex-col w-full">
-                            Data hasil perhitungan kubis
+                            Data hasil perhitungan kentang
                         </h2>
                         <table class="table-auto w-full border-separate border-spacing-0">
                             <thead>
@@ -164,14 +164,14 @@
                                 {% for x in his %}
                                 <tr class="border-b">
                                     <td class="text-center px-4 py-2 bg-gray-50">{{x[1]}}</td>
-                                    <td class="text-center px-4 py-2 bg-gray-50">{{x[2]}}</td>
                                     <td class="text-center px-4 py-2 bg-blue-50">{{x[3]}}</td>
+                                    <td class="text-center px-4 py-2 bg-gray-50">{{x[2]}}</td>
                                     <td class="text-center px-4 py-2 bg-orange-50 flex items-center justify-center py-4">
                                             <a href="
                                                 {% if x[2] is none or x[3] is none %}
                                                     #
                                                 {% else %}
-                                                    /kubis/history/detail/{{ x[0] }}
+                                                    /kentang/history/detail/{{ x[0] }}
                                                 {% endif %}
                                             " class="
                                                 px-2 py-1 text-sm rounded text-white 
@@ -242,7 +242,7 @@
                     label: 'Jumlah',
                     data: [
                         {% for x in his %}
-                            {{ 0 if x[2] is none else x[2]  }},
+                            {{ 0 if x[3] is none else x[3]  }},
                         {% endfor %}
 
                     ],
@@ -284,7 +284,7 @@
             }
 
             try {
-                const response = await fetch('/kubis/action/add_counting_group', {
+                const response = await fetch('/kentang/action/add_counting_group', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

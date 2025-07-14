@@ -10,6 +10,18 @@ from detectron2.modeling.backbone.fpn import FPN
 import torch
 import torchvision
 from os import environ
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+STATIC_FOLDER = os.path.abspath(os.path.join(BASE_DIR, '..', 'static'))
+RESULT_DIR = os.path.join(STATIC_FOLDER, 'ndre_result')
+os.makedirs(RESULT_DIR, exist_ok=True)
+
+TEMP_DIR = os.path.join(STATIC_FOLDER, 'ndre_result')
+os.makedirs(TEMP_DIR, exist_ok=True)
+
+
 
 BACKBONE_REGISTRY._obj_map.clear()
 
